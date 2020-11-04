@@ -1,0 +1,124 @@
+/*
+ * Copyright 2020 Vasiliy Vdovin
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+*{
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+html, body {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+#main {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: hidden;
+	perspective: 300px ;
+	perspective-origin: center;
+}
+
+#wrap {
+	position: absolute;
+	display: grid;
+	grid-auto-columns: 100vw;
+	grid-auto-rows: 100vh;
+	grid-auto-flow: column;
+	grid-column-gap: 80px;
+	transform-style: preserve-3d;
+	pointer-events: none;
+	background: transparent;
+	z-index: 0;
+}
+
+#show-nav {
+	position: fixed;
+	display: block;
+	top: 32px;
+	right: 32px;
+	z-index: 1;
+	outline: none;
+	cursor: pointer;
+	padding: 10px;
+}
+
+.section {
+	position: relative;
+	pointer-events: initial;
+	z-index: 1;
+	opacity: 1;
+	transform-style: preserve-3d;
+}
+
+.zoomout .section {
+	cursor: pointer;
+	user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	transform: translate3d(0, 0, -300px) scale(1);
+}
+.zoomin .section {
+	transform: translate3d(0, 0, 0) scale(1);
+}
+
+.section .content {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: grid;
+	grid-auto-columns: 100vw;
+	grid-auto-rows: 100vh;
+	grid-auto-flow: row;
+	grid-column-gap: 80px;
+	opacity: 1;
+	-webkit-overflow-scrolling: touch;
+}
+
+.zoomout .content {
+	overflow: hidden;
+}
+
+.zoomin .content {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.section.current {
+	z-index: 2;
+}
+
+.row {
+	position: relative;
+}
+
+.not-supported {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: gray;
+	z-index: 10;
+}
