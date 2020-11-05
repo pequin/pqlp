@@ -19,7 +19,8 @@
 	padding: 0;
 	border: 0;
 }
-html, body {
+
+html, body, main, .not-supported {
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -27,12 +28,7 @@ html, body {
 	left: 0;
 }
 
-#main {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+main {
 	overflow: hidden;
 	perspective: 300px ;
 	perspective-origin: center;
@@ -51,7 +47,7 @@ html, body {
 	z-index: 0;
 }
 
-#show-nav {
+#nav {
 	position: fixed;
 	display: block;
 	top: 32px;
@@ -62,7 +58,7 @@ html, body {
 	padding: 10px;
 }
 
-.section {
+main article {
 	position: relative;
 	pointer-events: initial;
 	z-index: 1;
@@ -70,18 +66,19 @@ html, body {
 	transform-style: preserve-3d;
 }
 
-.zoomout .section {
+main.zoomout article {
 	cursor: pointer;
 	user-select: none;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	transform: translate3d(0, 0, -300px) scale(1);
 }
-.zoomin .section {
+
+main.zoomin article {
 	transform: translate3d(0, 0, 0) scale(1);
 }
 
-.section .content {
+main article > div {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -96,29 +93,24 @@ html, body {
 	-webkit-overflow-scrolling: touch;
 }
 
-.zoomout .content {
+main.zoomout article > div {
 	overflow: hidden;
 }
 
-.zoomin .content {
+main.zoomin article > div {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
 
-.section.current {
+main article.current {
 	z-index: 2;
 }
 
-.row {
+main article > section {
 	position: relative;
 }
 
 .not-supported {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
 	background: gray;
 	z-index: 10;
 }
