@@ -37,11 +37,11 @@ main article > div {
 }
 
 main article:nth-child(1) > div {
-	background-image: url("/example/images/workplace.jpg");
+	background-image: url("../images/workplace.jpg");
 }
 main article:nth-child(2) > div {
-	background-image: url("/example/images/work.jpg");
+	background-image: url("../images/work.jpg");
 }
 main article:nth-child(3) > div {
-	background-image: url("/example/images/keyboard.jpg");
+	background-image: url("../images/keyboard.jpg");
 }
