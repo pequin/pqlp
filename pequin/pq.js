@@ -20,8 +20,9 @@ class PQLP {
 
 		this.main      = null;
 		this.wrap      = null;
-		this.sections  = null;
+		this.articles  = null;
 		this.current   = null;   // Current section.
+		this.article   = null;   // Article will change or moved.
 		this.index     = -1;     // Index of current section.
 		this.direction = true;   // Direction of animation (to the right - true).
 		this.timestamp = 0;      // Time of the last frame of the animation
@@ -30,6 +31,9 @@ class PQLP {
 		this.nav       = null;   // Navigation button.
 		this.zoomin    = false;  // State of navigation
 		this.touch     = [0, 0]; // Starting coordinates of touch ([0 = y, 1 = x]).
+
+		this.aURL = null;
+		this.sURL = null;
 
 		PQLP.listeners();
 
@@ -49,7 +53,7 @@ class PQLP {
 			pqlp.wrap     = document.getElementById("wrap");
 			pqlp.nav      = document.getElementById("nav");
 			pqlp.current  = pqlp.wrap.firstElementChild;
-			pqlp.sections = pqlp.wrap.children;
+			pqlp.articles = pqlp.wrap.children;
 			pqlp.index    = 0;
 
 			pqlp.main.classList.add("zoomin");
@@ -60,13 +64,50 @@ class PQLP {
 			PQLP.zoom(true);
 
 			pqlp.nav.addEventListener("click", PQLP.showNav);
+			
+			window.addEventListener('hashchange', PQLP.hashchange);
 
-			Array.prototype.forEach.call(pqlp.sections, function(section) {
+			Array.prototype.forEach.call(pqlp.articles, function(article) {
 
-				section.addEventListener("click", function(e) {
+				article.addEventListener("click", function() {
 
-					PQLP.zoomToClick(section);
+					PQLP.zoomToClick(article);
 				});
+			});
+
+			// Listener click in article nav.
+			Array.prototype.forEach.call(pqlp.wrap.getElementsByTagName("nav"), function(nav) {
+
+				Array.prototype.forEach.call(nav.getElementsByTagName("a"), function(a) {
+					
+					a.addEventListener("click", function(e) {
+
+						const hash = new URL(e.target.href).hash
+
+						if (hash.length > 0) {
+
+							e.preventDefault();
+
+							if (! pqlp.animation) {
+
+								const url = hash.replace("#", "").split("/");
+	
+								pqlp.aURL = url.length > 0 ? url[0] : null;
+								pqlp.sURL = url.length > 1 ? url[1] : null;
+	
+								if (pqlp.aURL != null && pqlp.aURL != pqlp.current.dataset.alias) {
+	
+									pqlp.article = PQLP.getArticleByUrl(pqlp.aURL);
+									pqlp.animation = true;
+									requestAnimationFrame(PQLP.animationToArticle);
+								}
+							}
+						}
+
+					}, {passive: false});
+					
+				});
+
 			});
 
 		}, false);
@@ -97,9 +138,9 @@ class PQLP {
 			let index = 0;
 
 			let i = 0;
-			Array.prototype.forEach.call(pqlp.sections, function(section) {
+			Array.prototype.forEach.call(pqlp.articles, function(article) {
 
-				if (section == target) {
+				if (article == target) {
 					index = i;
 				}
 
@@ -184,7 +225,7 @@ class PQLP {
 		const speed    = 200; // Speed ms.
 		const frames   = Math.ceil(speed / 16.666666666666668);
 		const index    = pqlp.direction ? pqlp.index + 1 : pqlp.index - 1;
-		const content  = index >= 0 && index < pqlp.sections.length ? pqlp.sections[index].firstElementChild : null;
+		const content  = index >= 0 && index < pqlp.articles.length ? pqlp.articles[index].firstElementChild : null;
 		const progress = pqlp.move / frames;
 
 		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
@@ -225,7 +266,7 @@ class PQLP {
 		const speed = 800;
 
 		// Verify is the current section extreme.
-		const isExtreme = (! pqlp.direction && pqlp.index == 0) || (pqlp.direction && (pqlp.index + 1)== pqlp.sections.length);
+		const isExtreme = (! pqlp.direction && pqlp.index == 0) || (pqlp.direction && (pqlp.index + 1)== pqlp.articles.length);
 
 		// Current frame.
 		const frame  = pqlp.move + 1;
@@ -246,9 +287,9 @@ class PQLP {
 		const indexOfNext      = pqlp.direction ? pqlp.index + 1 : pqlp.index - 1;
 		const indexOfFollowing = pqlp.direction ? pqlp.index + 2 : pqlp.index - 2;
 
-		const sectionPrevious  = indexOfPrevious  >= 0 && indexOfPrevious  < pqlp.sections.length ? pqlp.sections[indexOfPrevious] : null;
-		const sectionNext      = indexOfNext      >= 0 && indexOfNext      < pqlp.sections.length ? pqlp.sections[indexOfNext] : null;
-		const sectionFollowing = indexOfFollowing >= 0 && indexOfFollowing < pqlp.sections.length ? pqlp.sections[indexOfFollowing] : null;
+		const sectionPrevious  = indexOfPrevious  >= 0 && indexOfPrevious  < pqlp.articles.length ? pqlp.articles[indexOfPrevious] : null;
+		const sectionNext      = indexOfNext      >= 0 && indexOfNext      < pqlp.articles.length ? pqlp.articles[indexOfNext] : null;
+		const sectionFollowing = indexOfFollowing >= 0 && indexOfFollowing < pqlp.articles.length ? pqlp.articles[indexOfFollowing] : null;
 
 		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
 
@@ -339,9 +380,9 @@ class PQLP {
 			
 			pqlp.move = 0;
 
-			Array.prototype.forEach.call(pqlp.sections, function(section) {
+			Array.prototype.forEach.call(pqlp.articles, function(article) {
 
-				section.style.transform = null;
+				article.style.transform = null;
 			});
 
 			pqlp.main.scrollLeft = pqlp.direction ? pqlp.main.scrollLeft + (pqlp.main.clientWidth + (gap * 2)) : pqlp.main.scrollLeft - (pqlp.main.clientWidth + (gap * 2));
@@ -349,11 +390,11 @@ class PQLP {
 			// Change the current section.
 			const indexOfNext = pqlp.direction ? pqlp.index + 1 : pqlp.index - 1;
 
-			if (indexOfNext >= 0 && indexOfNext < pqlp.sections.length) {
+			if (indexOfNext >= 0 && indexOfNext < pqlp.articles.length) {
 
 				pqlp.current.classList.remove("current");
 
-				pqlp.current = pqlp.sections[indexOfNext];
+				pqlp.current = pqlp.articles[indexOfNext];
 
 				pqlp.current.classList.add("current");
 
@@ -409,6 +450,95 @@ class PQLP {
 		if (! pqlp.zoomin && !pqlp.animation) {
 
 			PQLP.setNext(x < 0);
+		}
+	}
+
+	static getArticleByUrl(url) {
+
+		let result = null;
+
+		Array.prototype.forEach.call(pqlp.articles, function(article) {
+
+			if (url == article.dataset.alias) {
+
+				result = article;
+			}
+		});
+
+		return result;
+	}
+
+	static animationToArticle(timestamp) {
+
+		const speed    = 600; // Speed ms.
+		const frames   = Math.ceil(speed / 16.666666666666668);
+		const progress = pqlp.move / frames;
+
+		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
+
+			if (progress == 0) {
+
+				pqlp.article.style.cssText = "z-index: -1; transform: translateX("+ (pqlp.current.offsetLeft - pqlp.article.offsetLeft) +"px);";
+
+			} else {
+
+				const vector = Math.pow((1 - progress), 3);
+
+				pqlp.current.style.opacity = vector;
+
+			}
+
+			pqlp.move++
+		}
+
+		if (progress < 1) {
+
+			pqlp.timestamp = timestamp;
+
+			requestAnimationFrame(PQLP.animationToArticle);
+
+		} else {
+
+			pqlp.move = 0;
+			pqlp.animation = false;
+			pqlp.article.style.cssText = null;
+			pqlp.current.style.cssText = null;
+
+			pqlp.current.classList.remove("current");
+
+			let i = 0;
+			Array.prototype.forEach.call(pqlp.articles, function(article) {
+
+				if (pqlp.article == article) {
+
+					pqlp.index = i;
+				}
+
+				i++;
+			});
+
+			pqlp.current = pqlp.article;
+
+			pqlp.current.classList.add("current");
+
+			PQLP.scrolToCurrent();
+
+		}
+	}
+
+	static hashchange(e) {
+
+		const url = new URL(e.newURL).hash.replace("#", "").split("/");
+
+		pqlp.aURL = url.length > 0 ? url[0] : null;
+		pqlp.sURL = url.length > 1 ? url[1] : null;
+
+		if (pqlp.aURL != null && pqlp.aURL != pqlp.current.dataset.alias) {
+
+			pqlp.article = PQLP.getArticleByUrl(pqlp.aURL);
+			pqlp.animation = true;
+
+			requestAnimationFrame(PQLP.animationToArticle);
 		}
 	}
 

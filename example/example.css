@@ -30,6 +30,18 @@ main article {
 	background-color: gold;
 }
 
-main article > div > section {
+main article > div {
+	background-size: cover;
+	background-position: center;
 	background-color: greenyellow;
+}
+
+main article:nth-child(1) > div {
+	background-image: url("/example/images/workplace.jpg");
+}
+main article:nth-child(2) > div {
+	background-image: url("/example/images/work.jpg");
+}
+main article:nth-child(3) > div {
+	background-image: url("/example/images/keyboard.jpg");
 }
