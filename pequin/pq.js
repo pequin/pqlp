@@ -49,12 +49,21 @@ class PQLP {
 
 		document.addEventListener("DOMContentLoaded", function(e) {
 
-			pqlp.main     = document.getElementById("main");
-			pqlp.wrap     = document.getElementById("wrap");
-			pqlp.nav      = document.getElementById("nav");
-			pqlp.current  = pqlp.wrap.firstElementChild;
+			const url = window.location.hash.replace("#", "").split("/");
+			
+			pqlp.main = document.getElementById("main");
+			pqlp.wrap = document.getElementById("wrap");
+			pqlp.nav  = document.getElementById("nav");
+			
+			pqlp.aURL = url.length > 0 ? url[0] : null;
+			pqlp.sURL = url.length > 1 ? url[1] : null;
+
 			pqlp.articles = pqlp.wrap.children;
-			pqlp.index    = 0;
+
+			const articleByUrl = pqlp.aURL ? PQLP.getArticleByUrl(pqlp.aURL) : null;
+
+			pqlp.current = articleByUrl ? articleByUrl[0] : pqlp.wrap.firstElementChild;
+			pqlp.index   = articleByUrl ? articleByUrl[1] : 0;
 
 			pqlp.main.classList.add("zoomin");
 			pqlp.nav.classList.add("zoomin");
@@ -97,7 +106,7 @@ class PQLP {
 	
 								if (pqlp.aURL != null && pqlp.aURL != pqlp.current.dataset.alias) {
 	
-									pqlp.article = PQLP.getArticleByUrl(pqlp.aURL);
+									pqlp.article = PQLP.getArticleByUrl(pqlp.aURL)[0];
 									pqlp.animation = true;
 									requestAnimationFrame(PQLP.animationToArticle);
 								}
@@ -105,12 +114,13 @@ class PQLP {
 						}
 
 					}, {passive: false});
-					
+
 				});
 
 			});
 
 		}, false);
+
 	}
 
 	static zoom(zoomin = false) {
@@ -456,6 +466,8 @@ class PQLP {
 	static getArticleByUrl(url) {
 
 		let result = null;
+		let index = 0;
+		let i = 0;
 
 		Array.prototype.forEach.call(pqlp.articles, function(article) {
 
@@ -463,9 +475,10 @@ class PQLP {
 
 				result = article;
 			}
+			i++;
 		});
 
-		return result;
+		return [result, index];
 	}
 
 	static animationToArticle(timestamp) {
@@ -528,17 +541,20 @@ class PQLP {
 
 	static hashchange(e) {
 
-		const url = new URL(e.newURL).hash.replace("#", "").split("/");
+		if (! pqlp.animation) {
 
-		pqlp.aURL = url.length > 0 ? url[0] : null;
-		pqlp.sURL = url.length > 1 ? url[1] : null;
+			const url = new URL(e.newURL).hash.replace("#", "").split("/");
 
-		if (pqlp.aURL != null && pqlp.aURL != pqlp.current.dataset.alias) {
-
-			pqlp.article = PQLP.getArticleByUrl(pqlp.aURL);
-			pqlp.animation = true;
-
-			requestAnimationFrame(PQLP.animationToArticle);
+			pqlp.aURL = url.length > 0 ? url[0] : null;
+			pqlp.sURL = url.length > 1 ? url[1] : null;
+	
+			if (pqlp.aURL != null && pqlp.aURL != pqlp.current.dataset.alias) {
+	
+				pqlp.article = PQLP.getArticleByUrl(pqlp.aURL)[0];
+				pqlp.animation = true;
+	
+				requestAnimationFrame(PQLP.animationToArticle);
+			}
 		}
 	}
 
@@ -561,4 +577,4 @@ class PQLP {
 	}
 }
 
-const pqlp = new PQLP()
+const pqlp = new PQLP();
