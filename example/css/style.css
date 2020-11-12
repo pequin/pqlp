@@ -45,3 +45,19 @@ main article:nth-child(2) > div {
 main article:nth-child(3) > div {
 	background-image: url("../images/keyboard.jpg");
 }
+
+main article > div > section {
+	background-image: url("../images/work.jpg");
+	background-size: cover;
+	background-position: center;
+}
+
+main article > div > section:nth-child(1) {
+	background-image: url("../images/microphone.jpg");
+}
+main article > div > section:nth-child(2) {
+	background-image: url("../images/coffee.jpg");
+}
+main article > div > section:nth-child(3) {
+	background-image: url("../images/food.jpg");
+}

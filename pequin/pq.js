@@ -21,8 +21,10 @@ class PQLP {
 		this.main      = null;
 		this.wrap      = null;
 		this.articles  = null;
-		this.current   = null;   // Current section.
+		this.current   = null;   // Current article.
+		this.visible   = null;   // Current section.
 		this.article   = null;   // Article will change or moved.
+		this.section   = null;   // Section will change or moved.
 		this.index     = -1;     // Index of current section.
 		this.direction = true;   // Direction of animation (to the right - true).
 		this.timestamp = 0;      // Time of the last frame of the animation
@@ -60,20 +62,26 @@ class PQLP {
 
 			pqlp.articles = pqlp.wrap.children;
 
-			const articleByUrl = pqlp.aAlias ? PQLP.getArticleByAlias(pqlp.aAlias) : null;
+			const articleAlias = pqlp.aAlias ? PQLP.getArticleByAlias(pqlp.aAlias) : [null, -1];
 
-			pqlp.current = articleByUrl ? articleByUrl[0] : pqlp.wrap.firstElementChild;
-			pqlp.index   = articleByUrl ? articleByUrl[1] : 0;
+			pqlp.current = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[0] : pqlp.wrap.firstElementChild;
+			pqlp.index   = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[1] : 0;
+
+
+			const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
+
+			pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
 
 			pqlp.main.classList.add("zoomin");
 			pqlp.nav.classList.add("zoomin");
 			pqlp.current.classList.add("current");
+			pqlp.visible.classList.add("visible");
 
 			PQLP.scrolToCurrent();
 			PQLP.zoom(true);
 
 			pqlp.nav.addEventListener("click", PQLP.showNav);
-			
+
 			window.addEventListener('hashchange', PQLP.hashchange);
 
 			Array.prototype.forEach.call(pqlp.articles, function(article) {
@@ -106,9 +114,17 @@ class PQLP {
 	
 								if (pqlp.aAlias && pqlp.aAlias != pqlp.current.dataset.alias) {
 	
-									pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
 									pqlp.animation = true;
-									requestAnimationFrame(PQLP.animationToArticle);
+									pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
+
+									requestAnimationFrame(PQLP.animationArticle);
+
+								} else if(pqlp.aAlias && pqlp.sAlias && pqlp.aAlias == pqlp.current.dataset.alias && pqlp.visible.dataset.alias != pqlp.sAlias) {
+
+									pqlp.animation = true;
+									pqlp.section = PQLP.getSectionByAlias(PQLP.getArticleByAlias(pqlp.aAlias)[0], pqlp.sAlias)[0];
+
+									requestAnimationFrame(PQLP.animationSection);
 								}
 							}
 						}
@@ -120,7 +136,6 @@ class PQLP {
 			});
 
 		}, false);
-
 	}
 
 	static zoom(zoomin = false) {
@@ -409,6 +424,14 @@ class PQLP {
 				pqlp.current.classList.add("current");
 
 				pqlp.index = indexOfNext;
+
+				pqlp.visible.classList.remove("visible");
+
+				const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
+
+				pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
+
+				pqlp.visible.classList.add("visible");
 			}
 			
 
@@ -473,6 +496,7 @@ class PQLP {
 
 			if (alias == article.dataset.alias) {
 
+				index = i;
 				result = article;
 			}
 			i++;
@@ -490,7 +514,8 @@ class PQLP {
 		Array.prototype.forEach.call(article.getElementsByTagName("section"), function(section) {
 
 			if (alias == section.dataset.alias) {
-
+				
+				index = i;
 				result = section;
 			}
 			i++;
@@ -499,7 +524,7 @@ class PQLP {
 		return [result, index];
 	}
 
-	static animationToArticle(timestamp) {
+	static animationArticle(timestamp) {
 
 		const speed    = 600; // Speed ms.
 		const frames   = Math.ceil(speed / 16.666666666666668);
@@ -516,7 +541,6 @@ class PQLP {
 				const vector = Math.pow((1 - progress), 3);
 
 				pqlp.current.style.opacity = vector;
-
 			}
 
 			pqlp.move++
@@ -526,7 +550,7 @@ class PQLP {
 
 			pqlp.timestamp = timestamp;
 
-			requestAnimationFrame(PQLP.animationToArticle);
+			requestAnimationFrame(PQLP.animationArticle);
 
 		} else {
 
@@ -547,13 +571,63 @@ class PQLP {
 
 				i++;
 			});
+			
+			pqlp.visible.classList.remove("visible");
 
 			pqlp.current = pqlp.article;
 
 			pqlp.current.classList.add("current");
 
+			const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
+
+			pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
+
+			pqlp.visible.classList.add("visible");
+
 			PQLP.scrolToCurrent();
 
+		}
+	}
+
+	static animationSection(timestamp) {
+
+		const speed    = 1000; // Speed ms.
+		const frames   = Math.ceil(speed / 16.666666666666668);
+		const progress = pqlp.move / frames;
+
+		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
+
+			if (progress == 0) {
+
+				pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: 0; transform: translate3d(0, 0, -300px);";
+
+			} else {
+
+				const vector = 1 - Math.pow((1 - progress), 6);
+
+				pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: "+(vector)+"; transform: translate3d(0, 0, -"+(300 * (1 - vector))+"px) rotate3d(1, 1.5, -0.5, "+(10 * (1 - vector))+"deg);";
+			}
+
+
+			pqlp.move++
+		}
+
+		if (progress < 1) {
+
+			pqlp.timestamp = timestamp;
+
+			requestAnimationFrame(PQLP.animationSection);
+
+		} else {
+
+			pqlp.visible.classList.remove("visible");
+
+			pqlp.visible = pqlp.section;
+			pqlp.visible.classList.add("visible");
+
+			pqlp.move = 0;
+			pqlp.animation = false;
+			pqlp.section.style = null;
 		}
 	}
 
@@ -571,7 +645,7 @@ class PQLP {
 				pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
 				pqlp.animation = true;
 	
-				requestAnimationFrame(PQLP.animationToArticle);
+				requestAnimationFrame(PQLP.animationArticle);
 			}
 		}
 	}

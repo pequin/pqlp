@@ -63,7 +63,7 @@ main article {
 	pointer-events: initial;
 	z-index: 1;
 	opacity: 1;
-	transform-style: preserve-3d;
+	/* transform-style: preserve-3d; */
 }
 
 main.zoomout article {
@@ -84,14 +84,9 @@ main article > div {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	display: grid;
-	grid-auto-columns: 100vw;
-	grid-auto-rows: 100vh;
-	grid-auto-flow: row;
-	grid-column-gap: 80px;
+	perspective: 300px;
 	opacity: 1;
 	z-index: 1;
-	-webkit-overflow-scrolling: touch;
 }
 
 main article > div > nav {
@@ -102,16 +97,8 @@ main article > div > nav {
 	top: 0;
 	bottom: 0;
 	left: 0;
-	z-index: 2;
-}
-
-main.zoomout article > div {
+	z-index: 100;
 	overflow: hidden;
-}
-
-main.zoomin article > div {
-	overflow-x: hidden;
-	overflow-y: auto;
 }
 
 main article.current {
@@ -119,7 +106,22 @@ main article.current {
 }
 
 main article > div > section {
-	position: relative;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: -1;
+	transform: translate3d(0, 0, -300px) scale(2);
+}
+
+main article > div > section:nth-child(1) {
+	z-index: 0;
+}
+
+main article > div > section.visible {
+	visibility: visible;
+	z-index: 1;
 }
 
 .not-supported {
