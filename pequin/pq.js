@@ -277,6 +277,7 @@ class PQLP {
 
 			pqlp.move = 0;
 			pqlp.animation = false;
+			content.style.cssText = null;
 
 			if (pqlp.zoomin) {
 	

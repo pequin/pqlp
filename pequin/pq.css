@@ -111,12 +111,11 @@ main article > div > section {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: -1;
-	transform: translate3d(0, 0, -300px) scale(2);
+	z-index: 0;
 }
 
 main article > div > section:nth-child(1) {
-	z-index: 0;
+	z-index: 1;
 }
 
 main article > div > section.visible {
