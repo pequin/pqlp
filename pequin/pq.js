@@ -32,8 +32,8 @@ class PQLP {
 		this.zoomin    = false;  // State of navigation
 		this.touch     = [0, 0]; // Starting coordinates of touch ([0 = y, 1 = x]).
 
-		this.aURL = null;
-		this.sURL = null;
+		this.aAlias = null;
+		this.sAlias = null;
 
 		PQLP.listeners();
 
@@ -55,12 +55,12 @@ class PQLP {
 			pqlp.wrap = document.getElementById("wrap");
 			pqlp.nav  = document.getElementById("nav");
 			
-			pqlp.aURL = url.length > 0 ? url[0] : null;
-			pqlp.sURL = url.length > 1 ? url[1] : null;
+			pqlp.aAlias = url.length > 0 ? url[0] : null;
+			pqlp.sAlias = url.length > 1 ? url[1] : null;
 
 			pqlp.articles = pqlp.wrap.children;
 
-			const articleByUrl = pqlp.aURL ? PQLP.getArticleByUrl(pqlp.aURL) : null;
+			const articleByUrl = pqlp.aAlias ? PQLP.getArticleByAlias(pqlp.aAlias) : null;
 
 			pqlp.current = articleByUrl ? articleByUrl[0] : pqlp.wrap.firstElementChild;
 			pqlp.index   = articleByUrl ? articleByUrl[1] : 0;
@@ -101,12 +101,12 @@ class PQLP {
 
 								const url = hash.replace("#", "").split("/");
 	
-								pqlp.aURL = url.length > 0 ? url[0] : null;
-								pqlp.sURL = url.length > 1 ? url[1] : null;
+								pqlp.aAlias = url.length > 0 ? url[0] : null;
+								pqlp.sAlias = url.length > 1 ? url[1] : null;
 	
-								if (pqlp.aURL != null && pqlp.aURL != pqlp.current.dataset.alias) {
+								if (pqlp.aAlias && pqlp.aAlias != pqlp.current.dataset.alias) {
 	
-									pqlp.article = PQLP.getArticleByUrl(pqlp.aURL)[0];
+									pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
 									pqlp.animation = true;
 									requestAnimationFrame(PQLP.animationToArticle);
 								}
@@ -463,7 +463,7 @@ class PQLP {
 		}
 	}
 
-	static getArticleByUrl(url) {
+	static getArticleByAlias(alias) {
 
 		let result = null;
 		let index = 0;
@@ -471,9 +471,27 @@ class PQLP {
 
 		Array.prototype.forEach.call(pqlp.articles, function(article) {
 
-			if (url == article.dataset.alias) {
+			if (alias == article.dataset.alias) {
 
 				result = article;
+			}
+			i++;
+		});
+
+		return [result, index];
+	}
+
+	static getSectionByAlias(article, alias) {
+
+		let result = null;
+		let index = 0;
+		let i = 0;
+
+		Array.prototype.forEach.call(article.getElementsByTagName("section"), function(section) {
+
+			if (alias == section.dataset.alias) {
+
+				result = section;
 			}
 			i++;
 		});
@@ -545,12 +563,12 @@ class PQLP {
 
 			const url = new URL(e.newURL).hash.replace("#", "").split("/");
 
-			pqlp.aURL = url.length > 0 ? url[0] : null;
-			pqlp.sURL = url.length > 1 ? url[1] : null;
+			pqlp.aAlias = url.length > 0 ? url[0] : null;
+			pqlp.sAlias = url.length > 1 ? url[1] : null;
 	
-			if (pqlp.aURL != null && pqlp.aURL != pqlp.current.dataset.alias) {
+			if (pqlp.aAlias != null && pqlp.aAlias != pqlp.current.dataset.alias) {
 	
-				pqlp.article = PQLP.getArticleByUrl(pqlp.aURL)[0];
+				pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
 				pqlp.animation = true;
 	
 				requestAnimationFrame(PQLP.animationToArticle);
