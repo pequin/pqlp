@@ -22,7 +22,7 @@ class PQLP {
 		this.wrap      = null;
 		this.articles  = null;
 		this.current   = null;   // Current article.
-		this.visible   = null;   // Current section.
+		// this.visible   = null;   // Current section.
 		this.article   = null;   // Article will change or moved.
 		this.section   = null;   // Section will change or moved.
 		this.index     = -1;     // Index of current section.
@@ -67,10 +67,9 @@ class PQLP {
 			pqlp.current = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[0] : pqlp.wrap.firstElementChild;
 			pqlp.index   = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[1] : 0;
 
+			const section = PQLP.getSectionByAlias(pqlp.current, pqlp.sAlias);
 
-			const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
-
-			pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
+			pqlp.visible = section[0] && section[1] >= 0 ? section[0] : pqlp.current.getElementsByTagName("section")[0];
 
 			pqlp.main.classList.add("zoomin");
 			pqlp.nav.classList.add("zoomin");
@@ -82,7 +81,13 @@ class PQLP {
 
 			pqlp.nav.addEventListener("click", PQLP.showNav);
 
-			window.addEventListener('hashchange', PQLP.hashchange);
+			window.addEventListener('popstate', PQLP.popstate);
+
+			// Array.prototype.forEach.call(pqlp.current.getElementsByTagName("section"), function(section) {
+
+			// 	console.debug("dfdfbdf", section);
+
+			// });
 
 			Array.prototype.forEach.call(pqlp.articles, function(article) {
 
@@ -90,6 +95,8 @@ class PQLP {
 
 					PQLP.zoomToClick(article);
 				});
+
+				article.firstElementChild.firstElementChild.classList.add("visible");
 			});
 
 			// Listener click in article nav.
@@ -109,23 +116,50 @@ class PQLP {
 
 								const url = hash.replace("#", "").split("/");
 	
-								pqlp.aAlias = url.length > 0 ? url[0] : null;
-								pqlp.sAlias = url.length > 1 ? url[1] : null;
+								// pqlp.aAlias = url.length > 0 ? url[0] : null;
+								// pqlp.sAlias = url.length > 1 ? url[1] : null;
 	
-								if (pqlp.aAlias && pqlp.aAlias != pqlp.current.dataset.alias) {
-	
-									pqlp.animation = true;
-									pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
+								const aAlias = url.length > 0 ? url[0] : null;
+								const sAlias = url.length > 1 ? url[1] : null;
 
-									requestAnimationFrame(PQLP.animationArticle);
+								const article = PQLP.getArticleByAlias(aAlias);
+								const section = PQLP.getSectionByAlias(article[0], sAlias);
 
-								} else if(pqlp.aAlias && pqlp.sAlias && pqlp.aAlias == pqlp.current.dataset.alias && pqlp.visible.dataset.alias != pqlp.sAlias) {
+								if (! (article[0] == pqlp.current && section[0] == pqlp.visible)) {
 
-									pqlp.animation = true;
-									pqlp.section = PQLP.getSectionByAlias(PQLP.getArticleByAlias(pqlp.aAlias)[0], pqlp.sAlias)[0];
-
-									requestAnimationFrame(PQLP.animationSection);
+									// console.debug("vv", article, section)
 								}
+
+
+	
+								// if (pqlp.aAlias && pqlp.sAlias == null && pqlp.aAlias != pqlp.current.dataset.alias) {
+	
+								// 	pqlp.animation = true;
+								// 	pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
+
+								// 	requestAnimationFrame(PQLP.animationArticle);
+
+								// } else if(pqlp.aAlias && pqlp.sAlias && pqlp.aAlias == pqlp.current.dataset.alias && pqlp.visible.dataset.alias != pqlp.sAlias) {
+
+								// 	pqlp.animation = true;
+								// 	pqlp.section = PQLP.getSectionByAlias(PQLP.getArticleByAlias(pqlp.aAlias)[0], pqlp.sAlias)[0];
+
+								// 	requestAnimationFrame(PQLP.animationSection);
+
+								// } else if(pqlp.aAlias && pqlp.sAlias) {
+
+								// 	const article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
+								// 	const section = PQLP.getSectionByAlias(PQLP.getArticleByAlias(pqlp.aAlias)[0], pqlp.sAlias)[0];
+
+								// 	// if (article != pqlp.current && section != pqlp.visible) {
+
+								// 	// 	pqlp.article = article;
+								// 	// 	pqlp.section = section;
+								// 	// 	pqlp.animation = true;
+								// 	// 	requestAnimationFrame(PQLP.animationArticle);
+
+								// 	// }
+								// }
 							}
 						}
 
@@ -426,13 +460,13 @@ class PQLP {
 
 				pqlp.index = indexOfNext;
 
-				pqlp.visible.classList.remove("visible");
+				// pqlp.visible.classList.remove("visible");
 
-				const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
+				// const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
 
-				pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
+				// pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
 
-				pqlp.visible.classList.add("visible");
+				// pqlp.visible.classList.add("visible");
 			}
 			
 
@@ -503,6 +537,11 @@ class PQLP {
 			i++;
 		});
 
+		if (result == null) {
+
+			result = pqlp.current;
+		}
+
 		return [result, index];
 	}
 
@@ -522,133 +561,139 @@ class PQLP {
 			i++;
 		});
 
+		if (result == null) {
+
+			result = pqlp.visible;
+		}
+
 		return [result, index];
 	}
 
-	static animationArticle(timestamp) {
+	// static animationArticle(timestamp) {
 
-		const speed    = 600; // Speed ms.
-		const frames   = Math.ceil(speed / 16.666666666666668);
-		const progress = pqlp.move / frames;
+	// 	const speed    = 600; // Speed ms.
+	// 	const frames   = Math.ceil(speed / 16.666666666666668);
+	// 	const progress = pqlp.move / frames;
 
-		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
+	// 	if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
 
-			if (progress == 0) {
+	// 		if (progress == 0) {
 
-				pqlp.article.style.cssText = "z-index: -1; transform: translateX("+ (pqlp.current.offsetLeft - pqlp.article.offsetLeft) +"px);";
+	// 			pqlp.article.style.cssText = "z-index: -1; transform: translateX("+ (pqlp.current.offsetLeft - pqlp.article.offsetLeft) +"px);";
 
-			} else {
+	// 		} else {
 
-				const vector = Math.pow((1 - progress), 3);
+	// 			const vector = Math.pow((1 - progress), 3);
 
-				pqlp.current.style.opacity = vector;
-			}
+	// 			pqlp.current.style.opacity = vector;
+	// 		}
 
-			pqlp.move++
-		}
+	// 		pqlp.move++
+	// 	}
 
-		if (progress < 1) {
+	// 	if (progress < 1) {
 
-			pqlp.timestamp = timestamp;
+	// 		pqlp.timestamp = timestamp;
 
-			requestAnimationFrame(PQLP.animationArticle);
+	// 		requestAnimationFrame(PQLP.animationArticle);
 
-		} else {
+	// 	} else {
 
-			pqlp.move = 0;
-			pqlp.animation = false;
-			pqlp.article.style.cssText = null;
-			pqlp.current.style.cssText = null;
+	// 		pqlp.move = 0;
+	// 		pqlp.animation = false;
+	// 		pqlp.article.style.cssText = null;
+	// 		pqlp.current.style.cssText = null;
 
-			pqlp.current.classList.remove("current");
+	// 		pqlp.current.classList.remove("current");
 
-			let i = 0;
-			Array.prototype.forEach.call(pqlp.articles, function(article) {
+	// 		let i = 0;
+	// 		Array.prototype.forEach.call(pqlp.articles, function(article) {
 
-				if (pqlp.article == article) {
+	// 			if (pqlp.article == article) {
 
-					pqlp.index = i;
-				}
+	// 				pqlp.index = i;
+	// 			}
 
-				i++;
-			});
+	// 			i++;
+	// 		});
 			
-			pqlp.visible.classList.remove("visible");
+	// 		pqlp.current = pqlp.article;
+			
+	// 		pqlp.current.classList.add("current");
 
-			pqlp.current = pqlp.article;
+	// 		PQLP.scrolToCurrent();
 
-			pqlp.current.classList.add("current");
+	// 	}
+	// }
 
-			const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
+	// static animationSection(timestamp) {
 
-			pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
+	// 	const speed    = 1000; // Speed ms.
+	// 	const frames   = Math.ceil(speed / 16.666666666666668);
+	// 	const progress = pqlp.move / frames;
 
-			pqlp.visible.classList.add("visible");
+	// 	if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
 
-			PQLP.scrolToCurrent();
+	// 		if (progress == 0) {
 
-		}
-	}
+	// 			pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: 0; transform: translate3d(0, 0, -300px);";
 
-	static animationSection(timestamp) {
+	// 		} else {
 
-		const speed    = 1000; // Speed ms.
-		const frames   = Math.ceil(speed / 16.666666666666668);
-		const progress = pqlp.move / frames;
+	// 			const vector = 1 - Math.pow((1 - progress), 6);
 
-		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
-
-			if (progress == 0) {
-
-				pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: 0; transform: translate3d(0, 0, -300px);";
-
-			} else {
-
-				const vector = 1 - Math.pow((1 - progress), 6);
-
-				pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: "+(vector)+"; transform: translate3d(0, 0, -"+(300 * (1 - vector))+"px) rotate3d(1, 1.5, -0.5, "+(10 * (1 - vector))+"deg);";
-			}
+	// 			pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: "+(vector)+"; transform: translate3d(0, 0, -"+(300 * (1 - vector))+"px) rotate3d(1, 1.5, -0.5, "+(10 * (1 - vector))+"deg);";
+	// 		}
 
 
-			pqlp.move++
-		}
+	// 		pqlp.move++
+	// 	}
 
-		if (progress < 1) {
+	// 	if (progress < 1) {
 
-			pqlp.timestamp = timestamp;
+	// 		pqlp.timestamp = timestamp;
 
-			requestAnimationFrame(PQLP.animationSection);
+	// 		requestAnimationFrame(PQLP.animationSection);
 
-		} else {
+	// 	} else {
 
-			pqlp.visible.classList.remove("visible");
+			
+	// 		pqlp.visible.classList.remove("visible");
+	// 		pqlp.visible = pqlp.section;
+	// 		pqlp.visible.classList.add("visible");
 
-			pqlp.visible = pqlp.section;
-			pqlp.visible.classList.add("visible");
+	// 		pqlp.move = 0;
+	// 		pqlp.animation = false;
+	// 		pqlp.section.style = null;
+	// 	}
+	// }
 
-			pqlp.move = 0;
-			pqlp.animation = false;
-			pqlp.section.style = null;
-		}
-	}
+	static popstate(e) {
 
-	static hashchange(e) {
+		// const url = window.location.hash.replace("#", "").split("/");
 
-		if (! pqlp.animation) {
+		// pqlp.aAlias = url.length > 0 ? url[0] : null;
+		// pqlp.sAlias = url.length > 1 ? url[1] : null;
 
-			const url = new URL(e.newURL).hash.replace("#", "").split("/");
+		// alert(pqlp.aAlias, pqlp.sAlias)
 
-			pqlp.aAlias = url.length > 0 ? url[0] : null;
-			pqlp.sAlias = url.length > 1 ? url[1] : null;
+		// console.debug("popstate", e, pqlp.aAlias, pqlp.sAlias);
+
+		// if (! pqlp.animation) {
+
+		// 	const url = new URL(e.newURL).hash.replace("#", "").split("/");
+
+		// 	pqlp.aAlias = url.length > 0 ? url[0] : null;
+		// 	pqlp.sAlias = url.length > 1 ? url[1] : null;
 	
-			if (pqlp.aAlias != null && pqlp.aAlias != pqlp.current.dataset.alias) {
+		// 	if (pqlp.aAlias != null && pqlp.aAlias != pqlp.current.dataset.alias) {
 	
-				pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
-				pqlp.animation = true;
+		// 		pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
+		// 		pqlp.animation = true;
 	
-				requestAnimationFrame(PQLP.animationArticle);
-			}
-		}
+		// 		requestAnimationFrame(PQLP.animationArticle);
+		// 	}
+		// }
 	}
 
 	// Move nav to forward or back.
