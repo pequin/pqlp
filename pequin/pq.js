@@ -22,9 +22,8 @@ class PQLP {
 		this.wrap      = null;
 		this.articles  = null;
 		this.current   = null;   // Current article.
-		// this.visible   = null;   // Current section.
-		this.article   = null;   // Article will change or moved.
-		this.section   = null;   // Section will change or moved.
+		this.article   = [];     // Article and index will change or moved.
+		this.section   = [];     // Section and indexwill change or moved.
 		this.index     = -1;     // Index of current section.
 		this.direction = true;   // Direction of animation (to the right - true).
 		this.timestamp = 0;      // Time of the last frame of the animation
@@ -33,9 +32,6 @@ class PQLP {
 		this.nav       = null;   // Navigation button.
 		this.zoomin    = false;  // State of navigation
 		this.touch     = [0, 0]; // Starting coordinates of touch ([0 = y, 1 = x]).
-
-		this.aAlias = null;
-		this.sAlias = null;
 
 		PQLP.listeners();
 
@@ -57,37 +53,28 @@ class PQLP {
 			pqlp.wrap = document.getElementById("wrap");
 			pqlp.nav  = document.getElementById("nav");
 			
-			pqlp.aAlias = url.length > 0 ? url[0] : null;
-			pqlp.sAlias = url.length > 1 ? url[1] : null;
+			const aAlias = url.length > 0 ? url[0] : null;
+			const sAlias = url.length > 1 ? url[1] : null;
 
 			pqlp.articles = pqlp.wrap.children;
 
-			const articleAlias = pqlp.aAlias ? PQLP.getArticleByAlias(pqlp.aAlias) : [null, -1];
+			const articleAlias = aAlias ? PQLP.getArticleByAlias(aAlias) : [null, -1];
 
 			pqlp.current = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[0] : pqlp.wrap.firstElementChild;
 			pqlp.index   = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[1] : 0;
 
-			const section = PQLP.getSectionByAlias(pqlp.current, pqlp.sAlias);
-
-			pqlp.visible = section[0] && section[1] >= 0 ? section[0] : pqlp.current.getElementsByTagName("section")[0];
+			const section = PQLP.getSectionByAlias(pqlp.current, sAlias);
 
 			pqlp.main.classList.add("zoomin");
 			pqlp.nav.classList.add("zoomin");
 			pqlp.current.classList.add("current");
-			pqlp.visible.classList.add("visible");
 
 			PQLP.scrolToCurrent();
 			PQLP.zoom(true);
 
 			pqlp.nav.addEventListener("click", PQLP.showNav);
 
-			window.addEventListener('popstate', PQLP.popstate);
-
-			// Array.prototype.forEach.call(pqlp.current.getElementsByTagName("section"), function(section) {
-
-			// 	console.debug("dfdfbdf", section);
-
-			// });
+			// window.addEventListener('popstate', PQLP.popstate);
 
 			Array.prototype.forEach.call(pqlp.articles, function(article) {
 
@@ -96,7 +83,10 @@ class PQLP {
 					PQLP.zoomToClick(article);
 				});
 
-				article.firstElementChild.firstElementChild.classList.add("visible");
+				article.visible = article.firstElementChild.firstElementChild
+
+				article.visible.classList.add("visible");
+
 			});
 
 			// Listener click in article nav.
@@ -116,50 +106,22 @@ class PQLP {
 
 								const url = hash.replace("#", "").split("/");
 	
-								// pqlp.aAlias = url.length > 0 ? url[0] : null;
-								// pqlp.sAlias = url.length > 1 ? url[1] : null;
-	
 								const aAlias = url.length > 0 ? url[0] : null;
 								const sAlias = url.length > 1 ? url[1] : null;
 
 								const article = PQLP.getArticleByAlias(aAlias);
 								const section = PQLP.getSectionByAlias(article[0], sAlias);
 
-								if (! (article[0] == pqlp.current && section[0] == pqlp.visible)) {
+								if (aAlias && sAlias && ! pqlp.animation && ! (pqlp.current == article[0] && pqlp.current.visible == section[0])) {
 
-									// console.debug("vv", article, section)
+									pqlp.animation = true;
+									pqlp.move      = 0;
+
+									pqlp.article = article;
+									pqlp.section = section;
+									
+									requestAnimationFrame(PQLP.animationSection);
 								}
-
-
-	
-								// if (pqlp.aAlias && pqlp.sAlias == null && pqlp.aAlias != pqlp.current.dataset.alias) {
-	
-								// 	pqlp.animation = true;
-								// 	pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
-
-								// 	requestAnimationFrame(PQLP.animationArticle);
-
-								// } else if(pqlp.aAlias && pqlp.sAlias && pqlp.aAlias == pqlp.current.dataset.alias && pqlp.visible.dataset.alias != pqlp.sAlias) {
-
-								// 	pqlp.animation = true;
-								// 	pqlp.section = PQLP.getSectionByAlias(PQLP.getArticleByAlias(pqlp.aAlias)[0], pqlp.sAlias)[0];
-
-								// 	requestAnimationFrame(PQLP.animationSection);
-
-								// } else if(pqlp.aAlias && pqlp.sAlias) {
-
-								// 	const article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
-								// 	const section = PQLP.getSectionByAlias(PQLP.getArticleByAlias(pqlp.aAlias)[0], pqlp.sAlias)[0];
-
-								// 	// if (article != pqlp.current && section != pqlp.visible) {
-
-								// 	// 	pqlp.article = article;
-								// 	// 	pqlp.section = section;
-								// 	// 	pqlp.animation = true;
-								// 	// 	requestAnimationFrame(PQLP.animationArticle);
-
-								// 	// }
-								// }
 							}
 						}
 
@@ -460,13 +422,6 @@ class PQLP {
 
 				pqlp.index = indexOfNext;
 
-				// pqlp.visible.classList.remove("visible");
-
-				// const currentSections = pqlp.current ? pqlp.current.getElementsByTagName("section") : [];
-
-				// pqlp.visible = currentSections.length > 0 ? currentSections[0] : null;
-
-				// pqlp.visible.classList.add("visible");
 			}
 			
 
@@ -569,106 +524,67 @@ class PQLP {
 		return [result, index];
 	}
 
-	// static animationArticle(timestamp) {
+	static animationSection(timestamp) {
 
-	// 	const speed    = 600; // Speed ms.
-	// 	const frames   = Math.ceil(speed / 16.666666666666668);
-	// 	const progress = pqlp.move / frames;
+		const speed    = 1000; // Speed ms.
+		const frames   = Math.ceil(speed / 16.666666666666668);
+		const progress = pqlp.move / frames;
 
-	// 	if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
+		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
 
-	// 		if (progress == 0) {
+			if (progress == 0) {
 
-	// 			pqlp.article.style.cssText = "z-index: -1; transform: translateX("+ (pqlp.current.offsetLeft - pqlp.article.offsetLeft) +"px);";
+				pqlp.article[0].visible.classList.remove("visible");
+				pqlp.article[0].visible.style.cssText = "z-index: 1; display: block; opacity: 1;"
 
-	// 		} else {
+				if (pqlp.current != pqlp.article[0]) {
+					
+					pqlp.article[0].style.cssText = "z-index: 99; transform: translate3d(0, 0, 0) scale(1);"
+				}
 
-	// 			const vector = Math.pow((1 - progress), 3);
+			} else {
 
-	// 			pqlp.current.style.opacity = vector;
-	// 		}
+				const vector = 1 - Math.pow((1 - progress), 3);
 
-	// 		pqlp.move++
-	// 	}
+				pqlp.section[0].style.cssText = "z-index: 3; display: block; opacity: "+ vector +"; transform: translate3d("+ (pqlp.current.offsetLeft - pqlp.article[0].offsetLeft) +"px, 0,  0) scale("+ vector +");"
 
-	// 	if (progress < 1) {
-
-	// 		pqlp.timestamp = timestamp;
-
-	// 		requestAnimationFrame(PQLP.animationArticle);
-
-	// 	} else {
-
-	// 		pqlp.move = 0;
-	// 		pqlp.animation = false;
-	// 		pqlp.article.style.cssText = null;
-	// 		pqlp.current.style.cssText = null;
-
-	// 		pqlp.current.classList.remove("current");
-
-	// 		let i = 0;
-	// 		Array.prototype.forEach.call(pqlp.articles, function(article) {
-
-	// 			if (pqlp.article == article) {
-
-	// 				pqlp.index = i;
-	// 			}
-
-	// 			i++;
-	// 		});
-			
-	// 		pqlp.current = pqlp.article;
-			
-	// 		pqlp.current.classList.add("current");
-
-	// 		PQLP.scrolToCurrent();
-
-	// 	}
-	// }
-
-	// static animationSection(timestamp) {
-
-	// 	const speed    = 1000; // Speed ms.
-	// 	const frames   = Math.ceil(speed / 16.666666666666668);
-	// 	const progress = pqlp.move / frames;
-
-	// 	if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
-
-	// 		if (progress == 0) {
-
-	// 			pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: 0; transform: translate3d(0, 0, -300px);";
-
-	// 		} else {
-
-	// 			const vector = 1 - Math.pow((1 - progress), 6);
-
-	// 			pqlp.section.style.cssText = "z-index: 99; visibility: visible; opacity: "+(vector)+"; transform: translate3d(0, 0, -"+(300 * (1 - vector))+"px) rotate3d(1, 1.5, -0.5, "+(10 * (1 - vector))+"deg);";
-	// 		}
+			}
 
 
-	// 		pqlp.move++
-	// 	}
 
-	// 	if (progress < 1) {
+			pqlp.move++
+		}
 
-	// 		pqlp.timestamp = timestamp;
+		if (progress < 1) {
 
-	// 		requestAnimationFrame(PQLP.animationSection);
+			pqlp.timestamp = timestamp;
 
-	// 	} else {
+			requestAnimationFrame(PQLP.animationSection);
 
-			
-	// 		pqlp.visible.classList.remove("visible");
-	// 		pqlp.visible = pqlp.section;
-	// 		pqlp.visible.classList.add("visible");
+		} else {
 
-	// 		pqlp.move = 0;
-	// 		pqlp.animation = false;
-	// 		pqlp.section.style = null;
-	// 	}
-	// }
+			pqlp.animation = false;
+			pqlp.move = 0;
 
-	static popstate(e) {
+			pqlp.article[0].style.cssText = null;
+			pqlp.section[0].style.cssText = null;
+			pqlp.article[0].visible.style.cssText = null;
+
+			if (pqlp.current != pqlp.article[0]) {
+				
+				pqlp.current.classList.remove("current");
+				pqlp.current = pqlp.article[0];
+				pqlp.index   = pqlp.article[1];
+				pqlp.current.classList.add("current");
+				PQLP.scrolToCurrent();
+			}
+
+			pqlp.current.visible = pqlp.section[0];
+			pqlp.current.visible.classList.add("visible");
+		}
+	}
+
+	// static popstate(e) {
 
 		// const url = window.location.hash.replace("#", "").split("/");
 
@@ -694,7 +610,7 @@ class PQLP {
 		// 		requestAnimationFrame(PQLP.animationArticle);
 		// 	}
 		// }
-	}
+	// }
 
 	// Move nav to forward or back.
 	static setNext(next = true) {
