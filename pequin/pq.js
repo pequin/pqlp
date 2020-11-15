@@ -63,8 +63,6 @@ class PQLP {
 			pqlp.current = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[0] : pqlp.wrap.firstElementChild;
 			pqlp.index   = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[1] : 0;
 
-			const section = PQLP.getSectionByAlias(pqlp.current, sAlias);
-
 			pqlp.main.classList.add("zoomin");
 			pqlp.nav.classList.add("zoomin");
 			pqlp.current.classList.add("current");
@@ -74,7 +72,7 @@ class PQLP {
 
 			pqlp.nav.addEventListener("click", PQLP.showNav);
 
-			// window.addEventListener('popstate', PQLP.popstate);
+			window.addEventListener('popstate', PQLP.popstate);
 
 			Array.prototype.forEach.call(pqlp.articles, function(article) {
 
@@ -584,33 +582,32 @@ class PQLP {
 		}
 	}
 
-	// static popstate(e) {
+	static popstate(e) {
 
-		// const url = window.location.hash.replace("#", "").split("/");
+		const url = window.location.hash.replace("#", "").split("/");
 
-		// pqlp.aAlias = url.length > 0 ? url[0] : null;
-		// pqlp.sAlias = url.length > 1 ? url[1] : null;
+		const aAlias = url.length > 0 ? url[0] : null;
+		const sAlias = url.length > 1 ? url[1] : null;
 
-		// alert(pqlp.aAlias, pqlp.sAlias)
+		const article = aAlias ? PQLP.getArticleByAlias(aAlias) : null;
+		const section = aAlias && sAlias ? PQLP.getSectionByAlias(article[0], sAlias) : null;
+		
+		if (article && pqlp.current != article[0]) {
 
-		// console.debug("popstate", e, pqlp.aAlias, pqlp.sAlias);
+			pqlp.current.classList.remove("current");
+			pqlp.current = article[0];
+			pqlp.index   = article[1];
+			pqlp.current.classList.add("current");
+			PQLP.scrolToCurrent();
+		}
 
-		// if (! pqlp.animation) {
+		if (section && pqlp.current.visible != section[0]) {
 
-		// 	const url = new URL(e.newURL).hash.replace("#", "").split("/");
-
-		// 	pqlp.aAlias = url.length > 0 ? url[0] : null;
-		// 	pqlp.sAlias = url.length > 1 ? url[1] : null;
-	
-		// 	if (pqlp.aAlias != null && pqlp.aAlias != pqlp.current.dataset.alias) {
-	
-		// 		pqlp.article = PQLP.getArticleByAlias(pqlp.aAlias)[0];
-		// 		pqlp.animation = true;
-	
-		// 		requestAnimationFrame(PQLP.animationArticle);
-		// 	}
-		// }
-	// }
+			pqlp.current.visible.classList.remove("visible");
+			pqlp.current.visible = section[0];
+			pqlp.current.visible.classList.add("visible");
+		}
+	}
 
 	// Move nav to forward or back.
 	static setNext(next = true) {
