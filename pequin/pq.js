@@ -83,7 +83,7 @@ class PQLP {
 					PQLP.zoomToClick(article);
 				});
 
-				article.visible = article.firstElementChild.firstElementChild
+				article.visible = pqlp.current == article && sAlias ? PQLP.getSectionByAlias(article, sAlias)[0] : article.firstElementChild.firstElementChild;
 
 				article.visible.classList.add("visible");
 
