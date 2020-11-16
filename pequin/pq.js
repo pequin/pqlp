@@ -129,6 +129,8 @@ class PQLP {
 
 			});
 
+			PQLP.navHighlighting();
+
 		}, false);
 	}
 
@@ -420,8 +422,9 @@ class PQLP {
 
 				pqlp.index = indexOfNext;
 
+				PQLP.navHighlighting();
+
 			}
-			
 
 			if (sectionFollowing) {
 
@@ -579,6 +582,8 @@ class PQLP {
 
 			pqlp.current.visible = pqlp.section[0];
 			pqlp.current.visible.classList.add("visible");
+
+			PQLP.navHighlighting();
 		}
 	}
 
@@ -607,6 +612,43 @@ class PQLP {
 			pqlp.current.visible = section[0];
 			pqlp.current.visible.classList.add("visible");
 		}
+	}
+
+	static navHighlighting() {
+
+		let articles = [];
+		let sections = [];
+
+		const aHash = "#" + pqlp.current.dataset.alias;
+		const sHash = aHash + "/" + pqlp.current.visible.dataset.alias;
+
+		Array.prototype.forEach.call(document.querySelectorAll("a[href='"+ aHash +"']:not(.article-active)"), function(item) {
+				
+			articles.push(item);
+			item.classList.add("article-active");
+		});
+
+		Array.prototype.forEach.call(document.querySelectorAll("a[href='"+ sHash +"']:not(.section-active)"), function(item) {
+				
+			sections.push(item);
+			item.classList.add("section-active");
+		});
+		
+		Array.prototype.forEach.call(document.querySelectorAll("a.article-active"), function(item) {
+
+			if (articles.indexOf(item) === -1) {
+
+				item.classList.remove("article-active");
+			}
+		});
+
+		Array.prototype.forEach.call(document.querySelectorAll("a.section-active"), function(item) {
+
+			if (sections.indexOf(item) === -1) {
+
+				item.classList.remove("section-active");
+			}
+		});
 	}
 
 	// Move nav to forward or back.
