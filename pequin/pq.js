@@ -422,7 +422,7 @@ class PQLP {
 
 				pqlp.index = indexOfNext;
 
-				PQLP.navHighlighting();
+				PQLP.changeHash();
 
 			}
 
@@ -583,7 +583,8 @@ class PQLP {
 			pqlp.current.visible = pqlp.section[0];
 			pqlp.current.visible.classList.add("visible");
 
-			PQLP.navHighlighting();
+			// PQLP.navHighlighting();
+			PQLP.changeHash();
 		}
 	}
 
@@ -612,6 +613,8 @@ class PQLP {
 			pqlp.current.visible = section[0];
 			pqlp.current.visible.classList.add("visible");
 		}
+
+		PQLP.navHighlighting();
 	}
 
 	static navHighlighting() {
@@ -633,7 +636,7 @@ class PQLP {
 			sections.push(item);
 			item.classList.add("section-active");
 		});
-		
+
 		Array.prototype.forEach.call(document.querySelectorAll("a.article-active"), function(item) {
 
 			if (articles.indexOf(item) === -1) {
@@ -649,6 +652,14 @@ class PQLP {
 				item.classList.remove("section-active");
 			}
 		});
+	}
+
+	static changeHash() {
+
+		const aHash = "#" + pqlp.current.dataset.alias;
+		const sHash = aHash + "/" + pqlp.current.visible.dataset.alias;
+
+		window.location.hash = sHash;
 	}
 
 	// Move nav to forward or back.
