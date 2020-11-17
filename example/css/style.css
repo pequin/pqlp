@@ -68,3 +68,12 @@ main article > div > section:nth-child(2) {
 main article > div > section:nth-child(3) {
 	background-image: url("../images/food.jpg");
 }
+
+body:before {
+	background-color: greenyellow;
+}
+
+body:after {
+	border-color: rgba(255, 255, 255, 0.5);
+	border-left-color: #ffffff;
+}

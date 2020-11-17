@@ -59,9 +59,20 @@ main {
 }
 
 main article {
-	position: relative;
 	pointer-events: initial;
 	z-index: 1;
+	opacity: 1;
+}
+
+#noLoaded main article {
+	position: absolute;
+	width: 10vw;
+	height: 10vh;
+	opacity: 0;
+}
+
+#loaded main article {
+	position: relative;
 	opacity: 1;
 }
 
@@ -117,11 +128,18 @@ main article > div > section {
 	bottom: 0;
 	left: 0;
 	z-index: 0;
+}
+
+#noLoaded main article > div > section {
+	display: block;
+}
+
+#loaded main article > div > section {
 	opacity: 0;
 	display: none;
 }
 
-main article > div > section.visible {
+#loaded main article > div > section.visible {
 	display: block;
 	opacity: 1;
 	z-index: 1;
@@ -130,4 +148,44 @@ main article > div > section.visible {
 .not-supported {
 	background: gray;
 	z-index: 10;
+}
+
+body#noLoaded:before {
+	content: "";
+	display: block;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 100;
+	display: block;
+}
+
+body#noLoaded:after {
+	content: "";
+	position: fixed;
+	display: block;
+	top: 50%;
+	left: 50%;
+	margin-top: -32px;
+	margin-left: -32px;
+	border-radius: 50%;
+	width: 64px;
+	height: 64px;
+	font-size: 10px;
+	transform: translateZ(0);
+	border-style: solid;
+	border-width: 8px;
+	animation: spinner 600ms infinite linear;
+	z-index: 101;
+}
+
+@keyframes spinner {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }

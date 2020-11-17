@@ -45,93 +45,107 @@ class PQLP {
 
 		}, false);
 
-		document.addEventListener("DOMContentLoaded", function(e) {
+		document.addEventListener("DOMContentLoaded", function() {
 
-			const url = window.location.hash.replace("#", "").split("/");
-			
-			pqlp.main = document.getElementById("main");
-			pqlp.wrap = document.getElementById("wrap");
-			pqlp.nav  = document.getElementById("nav");
-			
-			const aAlias = url.length > 0 ? url[0] : null;
-			const sAlias = url.length > 1 ? url[1] : null;
-
-			pqlp.articles = pqlp.wrap.children;
-
-			const articleAlias = aAlias ? PQLP.getArticleByAlias(aAlias) : [null, -1];
-
-			pqlp.current = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[0] : pqlp.wrap.firstElementChild;
-			pqlp.index   = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[1] : 0;
-
-			pqlp.main.classList.add("zoomin");
-			pqlp.nav.classList.add("zoomin");
-			pqlp.current.classList.add("current");
-
-			PQLP.scrolToCurrent();
-			PQLP.zoom(true);
-
-			pqlp.nav.addEventListener("click", PQLP.showNav);
-
-			window.addEventListener('popstate', PQLP.popstate);
-
-			Array.prototype.forEach.call(pqlp.articles, function(article) {
-
-				article.addEventListener("click", function() {
-
-					PQLP.zoomToClick(article);
-				});
-
-				article.visible = pqlp.current == article && sAlias ? PQLP.getSectionByAlias(article, sAlias)[0] : article.firstElementChild.firstElementChild;
-
-				article.visible.classList.add("visible");
-
-			});
-
-			// Listener click in article nav.
-			Array.prototype.forEach.call(pqlp.wrap.getElementsByTagName("nav"), function(nav) {
-
-				Array.prototype.forEach.call(nav.getElementsByTagName("a"), function(a) {
-					
-					a.addEventListener("click", function(e) {
-
-						const hash = new URL(e.target.href).hash
-
-						if (hash.length > 0) {
-
-							e.preventDefault();
-
-							if (! pqlp.animation) {
-
-								const url = hash.replace("#", "").split("/");
-	
-								const aAlias = url.length > 0 ? url[0] : null;
-								const sAlias = url.length > 1 ? url[1] : null;
-
-								const article = PQLP.getArticleByAlias(aAlias);
-								const section = PQLP.getSectionByAlias(article[0], sAlias);
-
-								if (aAlias && sAlias && ! pqlp.animation && ! (pqlp.current == article[0] && pqlp.current.visible == section[0])) {
-
-									pqlp.animation = true;
-									pqlp.move      = 0;
-
-									pqlp.article = article;
-									pqlp.section = section;
-									
-									requestAnimationFrame(PQLP.animationSection);
-								}
-							}
-						}
-
-					}, {passive: false});
-
-				});
-
-			});
-
-			PQLP.navHighlighting();
+			document.body.id = "noLoaded";
 
 		}, false);
+
+		window.addEventListener("load", function() {
+
+			document.body.id = "loaded";
+
+			PQLP.init();
+
+		}, false);
+	}
+
+	static init() {
+
+		const url = window.location.hash.replace("#", "").split("/");
+
+		pqlp.main = document.getElementById("main");
+		pqlp.wrap = document.getElementById("wrap");
+		pqlp.nav  = document.getElementById("nav");
+		
+		const aAlias = url.length > 0 ? url[0] : null;
+		const sAlias = url.length > 1 ? url[1] : null;
+
+		pqlp.articles = pqlp.wrap.children;
+
+		const articleAlias = aAlias ? PQLP.getArticleByAlias(aAlias) : [null, -1];
+
+		pqlp.current = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[0] : pqlp.wrap.firstElementChild;
+		pqlp.index   = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[1] : 0;
+
+		pqlp.main.classList.add("zoomin");
+		pqlp.nav.classList.add("zoomin");
+		pqlp.current.classList.add("current");
+
+		PQLP.scrolToCurrent();
+		PQLP.zoom(true);
+
+		pqlp.nav.addEventListener("click", PQLP.showNav);
+
+		window.addEventListener('popstate', PQLP.popstate);
+
+		Array.prototype.forEach.call(pqlp.articles, function(article) {
+
+			article.addEventListener("click", function() {
+
+				PQLP.zoomToClick(article);
+			});
+
+			article.visible = pqlp.current == article && sAlias ? PQLP.getSectionByAlias(article, sAlias)[0] : article.firstElementChild.firstElementChild;
+
+			article.visible.classList.add("visible");
+
+		});
+
+		// Listener click in article nav.
+		Array.prototype.forEach.call(pqlp.wrap.getElementsByTagName("nav"), function(nav) {
+
+			Array.prototype.forEach.call(nav.getElementsByTagName("a"), function(a) {
+				
+				a.addEventListener("click", function(e) {
+
+					const hash = new URL(e.target.href).hash
+
+					if (hash.length > 0) {
+
+						e.preventDefault();
+
+						if (! pqlp.animation) {
+
+							const url = hash.replace("#", "").split("/");
+
+							const aAlias = url.length > 0 ? url[0] : null;
+							const sAlias = url.length > 1 ? url[1] : null;
+
+							const article = PQLP.getArticleByAlias(aAlias);
+							const section = PQLP.getSectionByAlias(article[0], sAlias);
+
+							if (aAlias && sAlias && ! pqlp.animation && ! (pqlp.current == article[0] && pqlp.current.visible == section[0])) {
+
+								pqlp.animation = true;
+								pqlp.move      = 0;
+
+								pqlp.article = article;
+								pqlp.section = section;
+								
+								requestAnimationFrame(PQLP.animationSection);
+							}
+						}
+					}
+
+				}, {passive: false});
+
+			});
+
+		});
+
+		PQLP.navHighlighting();
+
 	}
 
 	static zoom(zoomin = false) {
