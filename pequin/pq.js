@@ -146,6 +146,47 @@ class PQLP {
 
 		PQLP.navHighlighting();
 
+		Array.prototype.forEach.call(pqlp.wrap.getElementsByTagName("form"), function(form) {
+
+			form.addEventListener("submit", function(event) {
+
+				event.preventDefault();
+
+				const data = {"form": form.name};
+
+				const xhr = new XMLHttpRequest();
+
+				xhr.open("POST", "/form.php", true);
+
+				xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+				
+				xhr.addEventListener("load", function() {
+
+					form.classList.add("load");
+				});
+
+				xhr.addEventListener("error", function() {
+
+					console.debug("error", event);
+				});
+
+				Array.prototype.forEach.call(form.getElementsByTagName("input"), function(input) {
+
+					data[input.name] = input.value;
+				});
+
+				Array.prototype.forEach.call(form.getElementsByTagName("textarea"), function(textarea) {
+
+					data[textarea.name] = textarea.value;
+				});
+
+				form.classList.add("sended");
+				
+				xhr.send(JSON.stringify(data));
+
+			}, {passive: false});
+
+		});
 	}
 
 	static zoom(zoomin = false) {

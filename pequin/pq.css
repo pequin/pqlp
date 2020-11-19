@@ -181,6 +181,158 @@ body#noLoaded:after {
 	z-index: 101;
 }
 
+form {
+	position: relative;
+	padding: 64px;
+	background-color: rgb(222, 247, 0);
+	--font-size: 16px;
+}
+
+form > fieldset {
+	position: relative;
+	display: grid;
+	grid-auto-flow: row;
+	padding: 16px;
+}
+
+input, textarea {
+	outline: none;
+	transition-property: border-color;
+	transition-duration: 300ms;
+	transition-timing-function: ease-out;
+	border-width: 5px;
+	border-style: solid;
+	border-color: orange;
+	padding-left: var(--font-size);
+	padding-right: var(--font-size);
+}
+
+input:hover, textarea:hover {
+	border-color: red;
+}
+
+input:focus, textarea:focus {
+	border-color: blue;
+}
+
+fieldset {
+	background-color: seagreen;
+}
+
+form::before, form::after {
+	transition-property: opacity, transform, top;
+	transition-duration: 300ms;
+	transition-timing-function: ease-out;
+	opacity: 0;
+}
+
+form.load::before, form.load::after {
+	opacity: 1;
+}
+
+form::before {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	text-align: center;
+	content: "Form sent successfully!";
+	z-index: 2;
+}
+
+form.load::before {
+	top: 25%;
+	opacity: 1;
+}
+
+form::after {
+	position: absolute;
+	display: block;
+	content: "";
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: salmon;
+	transform: scale(0);
+	z-index: 1;
+}
+
+form.load::after {
+	transform: scale(1);
+}
+
+form button, form input, form textarea, form label {
+	position: relative;
+	display: block;
+	line-height: calc(var(--font-size) * 2);
+	font-size: var(--font-size);
+}
+
+form textarea {
+	resize: vertical;
+}
+
+form button {
+	padding-left: calc(var(--font-size) * 2);
+	padding-right: calc(var(--font-size) * 2);
+}
+
+form button[type=submit]::before, form button[type=submit]::after {
+	content: "";
+	transition-property: opacity, transform;
+	transition-duration: 300ms;
+	transition-timing-function: ease-out;
+	position: absolute;
+	display: block;
+	visibility: hidden;
+	opacity: 0;
+}
+
+form.sended button[type=submit]::before, form.sended button[type=submit]::after {
+	visibility: visible;
+	opacity: 1;
+}
+
+form button[type=submit]:before {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgb(0, 255, 13);
+	transform: scale(0);
+}
+
+form.sended button[type=submit]::before {
+	transform: scale(1);
+}
+
+form button[type=submit]:after {
+	top: 50%;
+	left: 50%;
+	width: var(--font-size);
+	height: var(--font-size);
+	margin-top: calc(var(--font-size) / 2 * -1);
+	margin-left: calc(var(--font-size) / 2 * -1);
+	border-width: calc(var(--font-size) / 8);
+
+	border-radius: 50%;
+	border-style: solid;
+	
+	border-color: rgba(255, 255, 255, 0.5);
+	border-left-color: #ffffff;
+}
+
+form.sended button[type=submit]:after {
+	animation: spinner 600ms infinite linear;
+}
+
+input {
+	position: relative;
+	display: block;
+	background-color: rgb(6, 240, 45);
+}
+
 @keyframes spinner {
 	0% {
 		transform: rotate(0deg);
