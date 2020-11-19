@@ -59,13 +59,21 @@ main {
 }
 
 main article {
+	position: relative;
 	pointer-events: initial;
 	z-index: 1;
 	opacity: 1;
 }
 
+#loaded main article {
+	position: relative;
+	width: auto;
+	height: auto;
+	opacity: 1;
+}
+
 #noLoaded main article {
-	position: absolute;
+	/* position: absolute; */
 	width: 10vw;
 	height: 10vh;
 	opacity: 0;
@@ -272,6 +280,7 @@ form button, form input, form textarea, form label {
 form textarea {
 	resize: vertical;
 }
+
 
 form button {
 	padding-left: calc(var(--font-size) * 2);
