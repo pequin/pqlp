@@ -94,20 +94,27 @@ main article > div {
 main article > div > nav {
 	position: fixed;
 	display: flex;
+	width: 320px;
 	justify-content: center;
 	flex-flow: column;
 	top: 0;
 	bottom: 0;
 	left: 0;
 	z-index: 100;
-	transition: 300ms all ease-out;
-	opacity: 0;
-	transform: translate3d(-50%, 0, 0) scale(0);
 }
 
 main.zoomin article.current > div > nav {
+	transition: 300ms all ease-out;
+}
+
+main.zoomin article > div > nav {
+	opacity: 0;
+	transform: translateX(-320px);
+}
+
+main.zoomin article.current > div > nav, main.zoomout article > div > nav {
 	opacity: 1;
-	transform: translate3d(0, 0, 0)scale(1);
+	transform: translateX(0);
 }
 
 main article.current {
@@ -116,6 +123,7 @@ main article.current {
 
 main article > div > section {
 	position: absolute;
+	display: none;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -123,19 +131,14 @@ main article > div > section {
 	z-index: 0;
 }
 
-#noLoaded main article > div > section {
-	display: block;
-}
-
-#loaded main article > div > section {
-	opacity: 0;
-	display: none;
-}
-
-#loaded main article > div > section.visible {
+main article > div > section.visible {
 	display: block;
 	opacity: 1;
 	z-index: 1;
+}
+
+#noLoaded main article > div > section {
+	display: block;
 }
 
 .not-supported {

@@ -37,6 +37,10 @@ main article {
 	background-color: gold;
 }
 
+main article > div > nav {
+	background-color: rgba(43, 255, 0, 0.555);
+}
+
 main article > div {
 	background-size: cover;
 	background-position: center;
