@@ -61,7 +61,80 @@ main {
 main article {
 	position: relative;
 	pointer-events: initial;
+	transform-style: preserve-3d;
 	z-index: 1;
+}
+
+main article::before {
+	position: absolute;
+	content: "";
+	display: none;
+	bottom: -149px;
+	left: 0;
+	right: 0;
+	height: 300px;
+	transform-style: preserve-3d;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+	z-index: 150;
+	opacity: 1;
+	text-align: center;
+	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, 90deg);
+}
+
+main article::after {
+	position: absolute;
+	content: "";
+	bottom: -150px;
+	display: none;
+	left: 0;
+	right: 0;
+	height: 300px;
+	transform-style: preserve-3d;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+	z-index: 150;
+	opacity: 1;
+	text-align: center;
+	transform: translate3d(0, 0, -150px) scale(1) rotate3d(1, 0, 0, 90deg);
+}
+
+main article > header {
+	position: absolute;
+	display: none;
+	top: -149px;
+	left: 0;
+	right: 0;
+	height: 300px;
+	transform-style: preserve-3d;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
+	z-index: 150;
+	opacity: 1;
+	text-align: center;
+	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, -90deg);
+}
+
+main.zoomout article > header, main article::before, main article::after {
+	display: block;
+}
+
+main.zoomout article > header::after {
+	content: "";
+	position: absolute;
+	display: block;
+	left: 0;
+	right: 0;
+	bottom: -300px;
+	height: 300px;
+}
+
+main article > header > h2 {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	--height: 50px;
+	height: var(--height);
+	text-align: center;
+	transform: translate3d(0, -150px, calc(var(--height) / 2)) rotateX(90deg);
 }
 
 #noLoaded main article {

@@ -16,6 +16,11 @@
 
 main {
 	background-color: yellowgreen;
+	background-image: url("../images/microphone.jpg");
+}
+
+main article > header > h2 {
+	background-color: rgba(112, 131, 216, 0.6);
 }
 
 #nav.zoomin {

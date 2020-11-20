@@ -96,7 +96,7 @@ class PQLP {
 				PQLP.zoomToClick(article);
 			});
 
-			article.visible = pqlp.current == article && sAlias ? PQLP.getSectionByAlias(article, sAlias)[0] : article.firstElementChild.firstElementChild;
+			article.visible = pqlp.current == article && sAlias ? PQLP.getSectionByAlias(article, sAlias)[0] : article.getElementsByTagName("section")[0];
 
 			article.visible.classList.add("visible");
 
@@ -301,7 +301,7 @@ class PQLP {
 		const speed    = 200; // Speed ms.
 		const frames   = Math.ceil(speed / 16.666666666666668);
 		const index    = pqlp.direction ? pqlp.index + 1 : pqlp.index - 1;
-		const content  = index >= 0 && index < pqlp.articles.length ? pqlp.articles[index].firstElementChild : null;
+		const content  = index >= 0 && index < pqlp.articles.length ? pqlp.articles[index].getElementsByTagName("div")[0] : null;
 		const progress = pqlp.move / frames;
 
 		if ((timestamp - pqlp.timestamp) > 15) { // ~ 60 fps
@@ -310,7 +310,7 @@ class PQLP {
 
 				content.style.cssText = "visibility: visible; opacity: 0;"
 
-			} else if(content){
+			} else if(content) {
 
 				content.style.opacity = 1 - Math.pow((1 - progress), 2);
 			}
@@ -378,7 +378,7 @@ class PQLP {
 
 					if (sectionFollowing && progressForward == 0) {
 
-						sectionFollowing.firstElementChild.style.visibility = "hidden";
+						sectionFollowing.getElementsByTagName("div")[0].style.visibility = "hidden";
 					}
 
 					if (pqlp.current) {
