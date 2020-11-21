@@ -13,3 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+ /* https://www.w3schools.com/colors/colors_hsl.asp */
+
+:root {
+	--main-h: 200deg;
+	--main-s: 25%;
+	--main-l: 50%;
+}
