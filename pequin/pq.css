@@ -28,6 +28,25 @@ html, body, main, .not-supported {
 	left: 0;
 }
 
+#header {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 64px;
+	z-index: 1500;
+	background-color: rgba(130, 213, 238, 0.15);
+}
+
+#header.zoomin {
+	background-color: rgba(130, 238, 197, 0.15);
+}
+
+#nav {
+	position: relative;
+	cursor: pointer;
+}
+
 main {
 	overflow: hidden;
 	perspective: 300px ;
@@ -51,17 +70,6 @@ main {
 	pointer-events: none;
 	background: transparent;
 	z-index: 0;
-}
-
-#nav {
-	position: fixed;
-	display: block;
-	top: 32px;
-	right: 32px;
-	z-index: 1;
-	outline: none;
-	cursor: pointer;
-	padding: 10px;
 }
 
 main article {

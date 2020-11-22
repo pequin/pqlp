@@ -29,6 +29,7 @@ class PQLP {
 		this.timestamp = 0;      // Time of the last frame of the animation
 		this.move      = 0;      // Animation frames counter.
 		this.animation = false;  // Animation is currently running.
+		this.header    = null;   // Main header.
 		this.nav       = null;   // Navigation button.
 		this.zoomin    = false;  // State of navigation
 		this.touch     = [0, 0]; // Starting coordinates of touch ([0 = y, 1 = x]).
@@ -64,9 +65,10 @@ class PQLP {
 
 		const url = window.location.hash.replace("#", "").split("/");
 
-		pqlp.main = document.getElementById("main");
-		pqlp.wrap = document.getElementById("wrap");
-		pqlp.nav  = document.getElementById("nav");
+		pqlp.main   = document.getElementById("main");
+		pqlp.wrap   = document.getElementById("wrap");
+		pqlp.header = document.getElementById("header");
+		pqlp.nav    = document.getElementById("nav");
 		
 		const aAlias = url.length > 0 ? url[0] : null;
 		const sAlias = url.length > 1 ? url[1] : null;
@@ -79,7 +81,7 @@ class PQLP {
 		pqlp.index   = articleAlias[0] && articleAlias[1] > 0 ? articleAlias[1] : 0;
 
 		pqlp.main.classList.add("zoomin");
-		pqlp.nav.classList.add("zoomin");
+		pqlp.header.classList.add("zoomin");
 		pqlp.current.classList.add("current");
 
 		PQLP.scrolToCurrent();
@@ -263,7 +265,7 @@ class PQLP {
 		if (! pqlp.zoomin, progress == 0) {
 
 			pqlp.main.classList.replace("zoomin", "zoomout");
-			pqlp.nav.classList.replace("zoomin", "zoomout");
+			pqlp.header.classList.replace("zoomin", "zoomout");
 		}
 
 		if ((timestamp - pqlp.timestamp) > 15 && pqlp.current) { // ~ 60 fps
@@ -287,7 +289,7 @@ class PQLP {
 			if (pqlp.zoomin) {
 
 				pqlp.main.classList.replace("zoomout", "zoomin");
-				pqlp.nav.classList.replace("zoomout", "zoomin");
+				pqlp.header.classList.replace("zoomout", "zoomin");
 			}
 
 			pqlp.current.style.transform = null;
@@ -638,7 +640,6 @@ class PQLP {
 			pqlp.current.visible = pqlp.section[0];
 			pqlp.current.visible.classList.add("visible");
 
-			// PQLP.navHighlighting();
 			PQLP.changeHash();
 		}
 	}
