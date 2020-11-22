@@ -67,7 +67,6 @@ main article {
 	position: relative;
 	pointer-events: initial;
 	transform-style: preserve-3d;
-	z-index: 1;
 	background-image: linear-gradient(0deg,
 		hsla(var(--main-h), var(--main-s), var(--main-l), 1)  0%,
 		hsla(var(--main-h), calc(var(--main-s) * 0.9), calc(var(--main-l) * 0.9), 1)  10%,
@@ -81,11 +80,6 @@ main article {
 main article::before {
 	content: "";
 	bottom: -149px;
-	left: 0;
-	right: 0;
-	z-index: 150;
-	opacity: 1;
-	text-align: center;
 	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, 90deg);
 	background-image: linear-gradient(0deg,
 		hsla(var(--main-h), calc(var(--main-s) * 0.9), calc(var(--main-l) * 0.9), 0) 0%,
@@ -97,11 +91,6 @@ main article::before {
 main article::after {
 	content: "";
 	bottom: -150px;
-	left: 0;
-	right: 0;
-	z-index: 150;
-	opacity: 1;
-	text-align: center;
 	transform: translate3d(0, 0, -150px) scale(1) rotate3d(1, 0, 0, 90deg);
 	background-image: linear-gradient(0deg,
 		hsla(var(--main-h), calc(var(--main-s) * 0.2), calc(var(--main-l) * 0.2), 1) 0%,
@@ -111,13 +100,8 @@ main article::after {
 
 /* Glow top */
 main article > header {
-	content: "";
 	top: -149px;
-	left: 0;
-	right: 0;
-	z-index: 150;
-	opacity: 1;
-	text-align: center;
+	transform-style: preserve-3d;
 	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, -90deg);
 	background-image: linear-gradient(0deg,
 		hsla(var(--main-h), var(--main-s), var(--main-l), 1) 0%,
@@ -128,8 +112,6 @@ main article > header {
 /* Shadow top */
 main article > header::after {
 	content: "";
-	left: 0;
-	right: 0;
 	bottom: -300px;
 	background-image: linear-gradient(0deg,
 		hsla(var(--main-h), calc(var(--main-s) * 0.8), calc(var(--main-l) * 0.8), 0) 0%,
@@ -140,6 +122,8 @@ main article > header::after {
 main article > header, main article > header::after, main article::before, main article::after {
 	position: absolute; 
 	height: 300px;
+	left: 0;
+	right: 0;
 }
 
 main.zoomin article > header, main.zoomin article > header::after, main.zoomin article::before, main.zoomin article::after {
@@ -152,6 +136,7 @@ main.zoomout article > header, main.zoomout article::before, main.zoomout articl
 
 main article > header > h2 {
 	position: absolute;
+	display: block;
 	bottom: 0;
 	left: 0;
 	right: 0;
