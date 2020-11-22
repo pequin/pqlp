@@ -197,11 +197,11 @@ main.zoomin article > div > nav {
 	transform: translateX(-320px);
 }
 
-main.zoomin article.current > div {
+main.zoomin article > div {
 	pointer-events: initial;
 }
 
-main.zoomin article > div {
+main.zoomout article > div {
 	pointer-events: none;
 }
 
