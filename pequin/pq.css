@@ -33,9 +33,9 @@ main {
 	perspective: 300px ;
 	perspective-origin: center;
 	background-image: linear-gradient(0deg,
-		hsl(var(--main-h), calc(var(--main-s) * 0.1), calc(var(--main-l) * 0.1)) 0%,
-		hsl(var(--main-h), calc(var(--main-s) * 0.6), calc(var(--main-l) * 0.6)) 50%,
-		hsl(var(--main-h), calc(var(--main-s) * 0.1), calc(var(--main-l) * 0.1)) 100%
+		hsl(var(--main-h), calc(var(--main-s) * 0.55), calc(var(--main-l) * 0.1)) 0%,
+		hsl(var(--main-h), calc(var(--main-s) * 0.95), calc(var(--main-l) * 0.85)) 50%,
+		hsl(var(--main-h), calc(var(--main-s) * 0.55), calc(var(--main-l) * 0.1)) 100%
 	);
 	color: white;
 }
@@ -68,7 +68,7 @@ main article {
 	position: relative;
 	pointer-events: initial;
 	transform-style: preserve-3d;
-	background-color: hsl(var(--main-h), calc(var(--main-s) * 0.6), calc(var(--main-l) * 0.6));
+	background-color: hsl(var(--main-h), calc(var(--main-s) * 0.15), calc(var(--main-l) * 0.65));
 }
 
 /* Glow bottom */
@@ -77,8 +77,8 @@ main article::before {
 	bottom: -149px;
 	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, 90deg);
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), calc(var(--main-s) * 0.9), calc(var(--main-l) * 0.9), 0) 0%,
-		hsla(var(--main-h), var(--main-s), var(--main-l), 0.8) 100%
+		hsla(var(--main-h), calc(var(--main-s) * 0.15), calc(var(--main-l) * 0.15), 0.0) 0%,
+		hsla(var(--main-h), calc(var(--main-s) * 0.95), calc(var(--main-l) * 0.95), 0.95) 100%
 	);
 }
 
@@ -88,8 +88,8 @@ main article::after {
 	bottom: -150px;
 	transform: translate3d(0, 0, -150px) scale(1) rotate3d(1, 0, 0, 90deg);
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), calc(var(--main-s) * 0.2), calc(var(--main-l) * 0.2), 1) 0%,
-		hsla(var(--main-h), calc(var(--main-s) * 0.8), calc(var(--main-l) * 0.8), 0) 100%
+		hsla(var(--main-h), calc(var(--main-s) * 0.1), calc(var(--main-l) * 0.1), 0.95) 0%,
+		hsla(var(--main-h), calc(var(--main-s) * 0.75), calc(var(--main-l) * 0.75), 0) 100%
 	);
 }
 
@@ -99,8 +99,8 @@ main article > header {
 	transform-style: preserve-3d;
 	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, -90deg);
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), var(--main-s), var(--main-l), 0.8) 0%,
-		hsla(var(--main-h), calc(var(--main-s) * 0.9), calc(var(--main-l) * 0.9), 0) 100%
+		hsla(var(--main-h), calc(var(--main-s) * 0.95), calc(var(--main-l) * 0.95), 0.95) 0%,
+		hsla(var(--main-h), calc(var(--main-s) * 0.15), calc(var(--main-l) * 0.15), 0.0) 100%
 	);
 }
 
@@ -109,8 +109,8 @@ main article > header::after {
 	content: "";
 	bottom: -300px;
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), calc(var(--main-s) * 0.8), calc(var(--main-l) * 0.8), 0) 0%,
-		hsla(var(--main-h), calc(var(--main-s) * 0.2), calc(var(--main-l) * 0.2), 1) 100%
+		hsla(var(--main-h), calc(var(--main-s) * 0.75), calc(var(--main-l) * 0.75), 0) 0%,
+		hsla(var(--main-h), calc(var(--main-s) * 0.1), calc(var(--main-l) * 0.1), 0.95) 100%
 	);
 }
 
