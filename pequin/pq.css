@@ -33,17 +33,28 @@ html, body, main, .not-supported {
 	top: 0;
 	right: 0;
 	left: 0;
-	height: var(--header-height);
+	height: var(--header-size);
 	z-index: 1;
-	background-color: rgba(130, 213, 238, 0.15);
 }
 
-#header.zoomin {
-	background-color: rgba(130, 238, 197, 0.15);
+#logo {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: calc(var(--sidenav-l-p) + var(--sidenav-width) + var(--sidenav-r-p));
+	background-color: rgba(0, 30, 128, 0.2);
+	color: white;
 }
 
 #nav {
-	position: relative;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: var(--header-size);
+	background-color: rgba(0, 128, 0, 0.2);
+	color: white;
 	cursor: pointer;
 }
 
@@ -178,7 +189,7 @@ main article > div {
 
 .safe {
 	position: absolute;
-	top: var(--header-height);;
+	top: 0;
 	right: 0;
 	bottom: 0;
 	left: calc(var(--sidenav-l-p) + var(--sidenav-width) + var(--sidenav-r-p));
@@ -192,7 +203,7 @@ main article > div > nav {
 	padding-right: var(--sidenav-r-p);
 	justify-content: center;
 	flex-flow: column;
-	top: var(--header-height);
+	top: var(--header-size);
 	bottom: 0;
 	left: 0;
 	z-index: 100;
@@ -200,7 +211,7 @@ main article > div > nav {
 
 main article > div > nav > ul {
 	display: block;
-	margin-top: calc(var(--header-height) * -1);
+	margin-top: calc(var(--header-size) * -1);
 }
 
 main.zoomin article.current > div > nav {
