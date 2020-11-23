@@ -195,7 +195,7 @@ main article > div {
 	left: calc(var(--sidenav-l-p) + var(--sidenav-width) + var(--sidenav-r-p));
 }
 
-main article > div > nav {
+.side-nav {
 	position: fixed;
 	display: flex;
 	width: var(--sidenav-width);
@@ -203,16 +203,37 @@ main article > div > nav {
 	padding-right: var(--sidenav-r-p);
 	justify-content: center;
 	flex-flow: column;
-	top: var(--header-size);
+	top: 0;
 	bottom: 0;
 	left: 0;
 	z-index: 100;
+	background-color: rgba(255, 255, 255, 0.15);
 }
 
-main article > div > nav > ul {
+.side-nav > ul {
 	display: block;
+	list-style: none;
+	text-align: right;
 	margin-top: calc(var(--header-size) * -1);
 }
+
+.side-nav a {
+	display: inline-block;
+	/* width: 100%; */
+	text-decoration: none;
+	line-height: 1.4em;
+	font-size: 0.8em;
+	color: white;
+	border-bottom: 2px solid red;
+	margin-bottom: 1.2em;
+	/* background-color: violet; */
+}
+
+a.section-active {
+	color: rgb(207, 207, 207);
+}
+
+
 
 main.zoomin article.current > div > nav {
 	transition: 300ms all ease-out;
@@ -294,10 +315,6 @@ body#noLoaded:after {
 	border-width: 8px;
 	animation: spinner 600ms infinite linear;
 	z-index: 101;
-}
-
-.section-active {
-	color: green;
 }
 
 form {

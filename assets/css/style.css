@@ -17,13 +17,14 @@
  /* https://www.w3schools.com/colors/colors_hsl.asp */
 
 :root {
+	font-size: 16px;
 	--main-bc-h: 200deg;
 	--main-bc-s: 10%;
 	--main-bc-l: 25%;
 
 	--header-size: 64px;
 
-	--sidenav-width: 100px;
-	--sidenav-l-p: 20px;
-	--sidenav-r-p: 20px;
+	--sidenav-width: 80px;
+	--sidenav-l-p: 15px;
+	--sidenav-r-p: 15px;
 }
