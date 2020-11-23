@@ -207,7 +207,7 @@ main article > div {
 	bottom: 0;
 	left: 0;
 	z-index: 100;
-	background-color: rgba(255, 255, 255, 0.15);
+	/* background-color: rgba(255, 255, 255, 0.15); */
 }
 
 .side-nav > ul {
@@ -218,20 +218,29 @@ main article > div {
 }
 
 .side-nav a {
+	position: relative;
 	display: inline-block;
 	/* width: 100%; */
 	text-decoration: none;
-	line-height: 1.4em;
+	line-height: 1.8em;
 	font-size: 0.8em;
 	color: white;
-	border-bottom: 2px solid red;
-	margin-bottom: 1.2em;
-	/* background-color: violet; */
+	margin-bottom: 0.8em;
+	border-bottom: 1px  dashed hsla(var(--main-bc-h), 100%, 70%, 0.6);
 }
 
-a.section-active {
-	color: rgb(207, 207, 207);
+.side-nav a::after {
+	content: "";
+	position: absolute;
+	display: block;
+	bottom: -2px;
+	height: 2px;
+	width: 100%;
 }
+
+/* a.section-active { */
+	/* color: rgb(207, 207, 207); */
+/* } */
 
 
 
