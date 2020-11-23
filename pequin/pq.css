@@ -33,13 +33,13 @@ html, body, main, .not-supported {
 	top: 0;
 	right: 0;
 	left: 0;
-	height: 64px;
-	z-index: 1500;
+	height: var(--header-height);
+	z-index: 1;
 	background-color: rgba(130, 213, 238, 0.15);
 }
 
 #header.zoomin {
-	background-color: rgba(130, 238, 197, 0.15);
+	background-color: rgba(130, 238, 197, 0.9);
 }
 
 #nav {
@@ -52,9 +52,9 @@ main {
 	perspective: 300px ;
 	perspective-origin: center;
 	background-image: linear-gradient(0deg,
-		hsl(var(--main-h), calc(var(--main-s) * 0.55), calc(var(--main-l) * 0.1)) 0%,
-		hsl(var(--main-h), calc(var(--main-s) * 0.95), calc(var(--main-l) * 0.85)) 50%,
-		hsl(var(--main-h), calc(var(--main-s) * 0.55), calc(var(--main-l) * 0.1)) 100%
+		hsl(var(--main-bc-h), calc(var(--main-bc-s) * 0.55), calc(var(--main-bc-l) * 0.1)) 0%,
+		hsl(var(--main-bc-h), calc(var(--main-bc-s) * 0.95), calc(var(--main-bc-l) * 0.85)) 50%,
+		hsl(var(--main-bc-h), calc(var(--main-bc-s) * 0.55), calc(var(--main-bc-l) * 0.1)) 100%
 	);
 	color: white;
 }
@@ -76,7 +76,7 @@ main article {
 	position: relative;
 	pointer-events: initial;
 	transform-style: preserve-3d;
-	background-color: hsl(var(--main-h), calc(var(--main-s) * 0.15), calc(var(--main-l) * 0.65));
+	background-color: hsl(var(--main-bc-h), calc(var(--main-bc-s) * 0.15), calc(var(--main-bc-l) * 0.65));
 }
 
 /* Glow bottom */
@@ -85,8 +85,8 @@ main article::before {
 	bottom: -149px;
 	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, 90deg);
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), calc(var(--main-s) * 0.15), calc(var(--main-l) * 0.15), 0.0) 0%,
-		hsla(var(--main-h), calc(var(--main-s) * 0.95), calc(var(--main-l) * 0.95), 0.95) 100%
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.15), calc(var(--main-bc-l) * 0.15), 0.0) 0%,
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.95), calc(var(--main-bc-l) * 0.95), 0.95) 100%
 	);
 }
 
@@ -96,8 +96,8 @@ main article::after {
 	bottom: -150px;
 	transform: translate3d(0, 0, -150px) scale(1) rotate3d(1, 0, 0, 90deg);
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), calc(var(--main-s) * 0.1), calc(var(--main-l) * 0.1), 0.95) 0%,
-		hsla(var(--main-h), calc(var(--main-s) * 0.75), calc(var(--main-l) * 0.75), 0) 100%
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.1), calc(var(--main-bc-l) * 0.1), 0.95) 0%,
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.75), calc(var(--main-bc-l) * 0.75), 0) 100%
 	);
 }
 
@@ -107,8 +107,8 @@ main article > header {
 	transform-style: preserve-3d;
 	transform: translate3d(0, 0, 150px) scale(1) rotate3d(1, 0, 0, -90deg);
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), calc(var(--main-s) * 0.95), calc(var(--main-l) * 0.95), 0.95) 0%,
-		hsla(var(--main-h), calc(var(--main-s) * 0.15), calc(var(--main-l) * 0.15), 0.0) 100%
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.95), calc(var(--main-bc-l) * 0.95), 0.95) 0%,
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.15), calc(var(--main-bc-l) * 0.15), 0.0) 100%
 	);
 }
 
@@ -117,8 +117,8 @@ main article > header::after {
 	content: "";
 	bottom: -300px;
 	background-image: linear-gradient(0deg,
-		hsla(var(--main-h), calc(var(--main-s) * 0.75), calc(var(--main-l) * 0.75), 0) 0%,
-		hsla(var(--main-h), calc(var(--main-s) * 0.1), calc(var(--main-l) * 0.1), 0.95) 100%
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.75), calc(var(--main-bc-l) * 0.75), 0) 0%,
+		hsla(var(--main-bc-h), calc(var(--main-bc-s) * 0.1), calc(var(--main-bc-l) * 0.1), 0.95) 100%
 	);
 }
 
@@ -176,16 +176,31 @@ main article > div {
 	z-index: 1;
 }
 
+.safe {
+	position: absolute;
+	top: var(--header-height);;
+	right: 0;
+	bottom: 0;
+	left: calc(var(--sidenav-l-p) + var(--sidenav-width) + var(--sidenav-r-p));
+}
+
 main article > div > nav {
 	position: fixed;
 	display: flex;
-	width: 320px;
+	width: var(--sidenav-width);
+	padding-left: var(--sidenav-l-p);
+	padding-right: var(--sidenav-r-p);
 	justify-content: center;
 	flex-flow: column;
-	top: 0;
+	top: var(--header-height);
 	bottom: 0;
 	left: 0;
 	z-index: 100;
+}
+
+main article > div > nav > ul {
+	display: block;
+	margin-top: calc(var(--header-height) * -1);
 }
 
 main.zoomin article.current > div > nav {
