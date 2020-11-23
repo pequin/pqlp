@@ -39,7 +39,7 @@ html, body, main, .not-supported {
 }
 
 #header.zoomin {
-	background-color: rgba(130, 238, 197, 0.9);
+	background-color: rgba(130, 238, 197, 0.15);
 }
 
 #nav {
@@ -283,6 +283,10 @@ body#noLoaded:after {
 	border-width: 8px;
 	animation: spinner 600ms infinite linear;
 	z-index: 101;
+}
+
+.section-active {
+	color: green;
 }
 
 form {
