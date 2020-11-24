@@ -237,7 +237,7 @@ main.zoomout article > div {
 	content: "";
 	position: absolute;
 	display: block;
-	transition-property: transform;
+	transition-property: transform, border-radius;
 	transition-duration: 300ms;
 	transition-timing-function: ease-out;
 	background-color: hsl(var(--main-fc-h), var(--main-fc-s), var(--main-fc-l));
@@ -246,11 +246,12 @@ main.zoomout article > div {
 	height: 3px;
 	left: -3px;
 	right: -3px;
-	border-radius: 2px;
+	border-radius: 0;
 }
 
 .side-nav a:hover::after, .side-nav a.section-active::after {
 	transform: translate3d(0 , 0, 0) scale(1);
+	border-radius: 2px;
 }
 
 main .side-nav li {
