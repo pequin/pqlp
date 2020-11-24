@@ -283,7 +283,7 @@ main.zoomin article.current li:nth-child(10) {
 	transition-delay: calc((var(--transition-duration) * 9) * var(--transition-offset));
 }
 
-.side-nav a::before, .side-nav a::after {
+.side-nav a::after {
 	content: "";
 	position: absolute;
 	display: block;
@@ -300,11 +300,11 @@ main.zoomin article.current li:nth-child(10) {
 	visibility: hidden;
 }
 
-main.zoomout .side-nav a:hover::after, main.zoomout .side-nav a::before {
+main.zoomout .side-nav a:hover::after {
 	display: none;
 }
 
-.side-nav a:hover::after, .side-nav a.section-active::before {
+.side-nav a:hover::after, .side-nav a.section-active::after {
 	transform: translate3d(0 , 0, 0) scale(1);
 	visibility: visible;
 }
