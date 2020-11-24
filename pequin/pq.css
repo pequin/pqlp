@@ -196,11 +196,11 @@ main article > div {
 }
 
 .side-nav {
-	position: fixed;
-	display: flex;
+	position: absolute;
+	display: grid;
 	width: var(--sidenav-width);
-	justify-content: center;
-	flex-flow: column;
+	justify-content: right;
+	align-content: center;
 	top: 0;
 	bottom: 0;
 	left: 0;
@@ -211,7 +211,6 @@ main article > div {
 	display: block;
 	list-style: none;
 	text-align: right;
-	margin-top: calc(var(--header-size) * -1);
 }
 
 .side-nav a {
@@ -298,12 +297,16 @@ main.zoomin article.current li:nth-child(10) {
 	border-radius: 2px;
 }
 
+main.zoomout .side-nav a:hover::after, main.zoomout .side-nav a::before {
+	display: none;
+}
+
 .side-nav a::after, .side-nav a::before {
 	background-color: hsl(var(--main-fc-h), var(--main-fc-s), var(--main-fc-l));
 	transform: translateX(50%) scaleX(0);
 }
 
-.side-nav a:hover::after, .side-nav a.section-active::before   {
+.side-nav a:hover::after, .side-nav a.section-active::before {
 	transform: translateX(0) scaleX(1);
 }
 
