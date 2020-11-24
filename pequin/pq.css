@@ -288,26 +288,25 @@ main.zoomin article.current li:nth-child(10) {
 	position: absolute;
 	display: block;
 	transition-property: transform;
-	transition-duration: 250ms;
+	transition-duration: 300ms;
 	transition-timing-function: ease-out;
+	background-color: hsl(var(--main-fc-h), var(--main-fc-s), var(--main-fc-l));
+	transform: translate3d(50% , -25%, 0) scale(0);
 	bottom: -2px;
 	height: 3px;
 	left: -3px;
 	right: -3px;
 	border-radius: 2px;
+	visibility: hidden;
 }
 
 main.zoomout .side-nav a:hover::after, main.zoomout .side-nav a::before {
 	display: none;
 }
 
-.side-nav a::after, .side-nav a::before {
-	background-color: hsl(var(--main-fc-h), var(--main-fc-s), var(--main-fc-l));
-	transform: translateX(50%) scaleX(0);
-}
-
 .side-nav a:hover::after, .side-nav a.section-active::before {
-	transform: translateX(0) scaleX(1);
+	transform: translate3d(0 , 0, 0) scale(1);
+	visibility: visible;
 }
 
 main.zoomin article > div {
