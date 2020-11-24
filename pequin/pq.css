@@ -42,7 +42,7 @@ html, body, main, .not-supported {
 	top: 0;
 	bottom: 0;
 	left: 0;
-	width: calc(var(--sidenav-padding) + var(--sidenav-width));
+	width: var(--sidenav-width);
 	background-color: rgba(0, 30, 128, 0.2);
 	color: white;
 }
@@ -192,14 +192,13 @@ main article > div {
 	top: 0;
 	right: 0;
 	bottom: 0;
-	left: calc(var(--sidenav-padding) + var(--sidenav-width));
+	left: var(--sidenav-width);
 }
 
 .side-nav {
 	position: fixed;
 	display: flex;
 	width: var(--sidenav-width);
-	padding-left: var(--sidenav-padding);
 	justify-content: center;
 	flex-flow: column;
 	top: 0;
@@ -225,6 +224,66 @@ main article > div {
 	margin: 3px 0;
 }
 
+main .side-nav li {
+	--transition-duration: 300ms;
+	--transition-offset: 0.25;
+}
+
+main.zoomin article.current .side-nav li {
+	transition: var(--transition-duration) all ease-out;
+}
+
+main.zoomin article:not(.current) .side-nav li {
+	transform: translateX(calc(calc(var(--sidenav-width) + 3px) * -1)) skewX(-30deg) scale(0);
+	opacity: 0;
+}
+
+main.zoomin article.current .side-nav li, main.zoomout article .side-nav li {
+	transform: translateX(0) skewX(0deg) scale(1);
+	opacity: 1;
+}
+
+/* Sequential animation of menu items. */
+main.zoomin article.current li:nth-child(1) {
+	transition-delay: 0;
+}
+
+main.zoomin article.current li:nth-child(2) {
+	transition-delay: calc(var(--transition-duration) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(3) {
+	transition-delay: calc((var(--transition-duration) * 2) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(4) {
+	transition-delay: calc((var(--transition-duration) * 3) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(5) {
+	transition-delay: calc((var(--transition-duration) * 4) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(6) {
+	transition-delay: calc((var(--transition-duration) * 5) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(7) {
+	transition-delay: calc((var(--transition-duration) * 6) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(8) {
+	transition-delay: calc((var(--transition-duration) * 7) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(9) {
+	transition-delay: calc((var(--transition-duration) * 8) * var(--transition-offset));
+}
+
+main.zoomin article.current li:nth-child(10) {
+	transition-delay: calc((var(--transition-duration) * 9) * var(--transition-offset));
+}
+
 .side-nav a::before, .side-nav a::after {
 	content: "";
 	position: absolute;
@@ -248,26 +307,12 @@ main article > div {
 	transform: translateX(0) scaleX(1);
 }
 
-main.zoomin article.current > div > nav {
-	transition: 300ms all ease-out;
-}
-
-main.zoomin article > div > nav {
-	opacity: 0;
-	transform: translateX(-320px);
-}
-
 main.zoomin article > div {
 	pointer-events: initial;
 }
 
 main.zoomout article > div {
 	pointer-events: none;
-}
-
-main.zoomin article.current > div > nav, main.zoomout article > div > nav {
-	opacity: 1;
-	transform: translateX(0);
 }
 
 main article.current {
