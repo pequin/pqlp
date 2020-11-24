@@ -307,16 +307,10 @@ main.zoomin article.current li:nth-child(10) {
 	left: -3px;
 	right: -3px;
 	border-radius: 2px;
-	visibility: hidden;
-}
-
-main.zoomout .side-nav a::after {
-	display: none;
 }
 
 .side-nav a:hover::after, .side-nav a.section-active::after {
 	transform: translate3d(0 , 0, 0) scale(1);
-	visibility: visible;
 }
 
 main.zoomin article > div {
