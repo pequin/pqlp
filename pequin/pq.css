@@ -300,7 +300,7 @@ main.zoomin article.current li:nth-child(10) {
 	visibility: hidden;
 }
 
-main.zoomout .side-nav a:hover::after {
+main.zoomout .side-nav a::after {
 	display: none;
 }
 
