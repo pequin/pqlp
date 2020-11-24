@@ -20,14 +20,16 @@
 */
 
 :root {
-	font-size: 16px;
 	--main-bc-h: 200deg;
-	--main-bc-s: 10%;
-	--main-bc-l: 25%;
+	--main-bc-s: 20%;
+	--main-bc-l: 20%;
+
+	--main-fc-h: 0deg;
+	--main-fc-s: 100%;
+	--main-fc-l: 50%;
 
 	--header-size: 64px;
 
 	--sidenav-width: 80px;
-	--sidenav-l-p: 15px;
-	--sidenav-r-p: 15px;
+	--sidenav-padding: 15px;
 }
