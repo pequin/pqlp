@@ -128,8 +128,9 @@ html, body, main, .not-supported {
 	transform: translate3d(16px, 0px, 0) scaleX(0);
 }
 
-#nav:hover g :last-child {
-	transform: translate3d(0, 0, 0) scaleX(1);
+.side-nav a.section-active::after {
+	transform: translate3d(0 , 0, 0) scale(1);
+	border-radius: 2px;
 }
 
 main {
@@ -317,11 +318,6 @@ main.zoomout article > div {
 	left: -2px;
 	right: -2px;
 	border-radius: 0;
-}
-
-.side-nav a:hover::after, .side-nav a.section-active::after {
-	transform: translate3d(0 , 0, 0) scale(1);
-	border-radius: 2px;
 }
 
 main .side-nav li {
@@ -611,6 +607,17 @@ input {
 	display: block;
 	background-color: rgb(6, 240, 45);
 } */
+
+@media (hover: hover) {
+	#nav:hover g :last-child {
+		transform: translate3d(0, 0, 0) scaleX(1);
+	}
+
+	.side-nav a:hover::after {
+		transform: translate3d(0 , 0, 0) scale(1);
+		border-radius: 2px;
+	}
+}
 
 @keyframes spinner {
 	0% {
