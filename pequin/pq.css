@@ -67,59 +67,22 @@ html, body, main, .not-supported {
 	height: 32px;
 }
 
-#icon-nav g line {
+#icon-nav line {
+	transition: all 600ms ease-out;
 	stroke-width: 4px;
-	
+	stroke: rgb(189, 189, 189);
 	stroke-linecap: round;
+	transform: translate3d(0, 0, 0) scale(1);
 }
 
-#icon-nav g line:first-child {
-	stroke: hsl(var(--main-bc-h), 10%, 90%);
-}
-
-#icon-nav g line:last-child {
-	--transition-duration: 600ms;
-	transition-property: transform;
-	transition-timing-function: ease-out;
-	transition-duration: var(--transition-duration);
-	stroke: hsl(var(--main-fc-h), var(--main-fc-s), var(--main-fc-l));
-}
-
-#icon-nav #icon-nav-center line:last-child  {
-	transition-duration: calc(var(--transition-duration) * 0.6666);
-}
-
-#icon-nav g {
-	transition-property: transform;
-	transition-timing-function: ease-out;
-}
-
-.zoomout #icon-nav g {
-	transition-duration: 600ms;
-}
-
-.zoomin #icon-nav g {
-	transition-duration: 300ms;
-}
-
-.zoomout #icon-nav-top {
+.zoomout #nav #icon-nav #icon-nav-top-base, .zoomout  #nav #icon-nav #icon-nav-top-hover {
 	transform: translate3d(6px, 3px, 0) rotate(45deg);
 }
-
-.zoomout #icon-nav-center {
+.zoomout #nav #icon-nav #icon-nav-center-base, .zoomout  #nav #icon-nav #icon-nav-center-hover {
 	transform: translate3d(30px, 16px, 0) scale(0);
 }
-
-.zoomout #icon-nav-bottom {
+.zoomout #nav #icon-nav #icon-nav-bottom-base, .zoomout  #nav #icon-nav #icon-nav-bottom-hover {
 	transform: translate3d(-16px, 6px, 0) rotate(-45deg);
-}
-
-#icon-nav g :last-child {
-	transform: translate3d(16px, 0px, 0) scaleX(0);
-}
-
-#nav:hover g :last-child {
-	transform: translate3d(0, 0, 0) scaleX(1);
 }
 
 main {
