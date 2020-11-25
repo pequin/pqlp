@@ -359,6 +359,12 @@ main article > div > section {
 	z-index: 0;
 }
 
+.header-safe {
+	position: relative;
+	margin-right: var(--header-size);
+	min-height: var(--header-size);
+}
+
 main article > div > section.visible {
 	display: block;
 	opacity: 1;
