@@ -49,6 +49,17 @@ html, body, main, .not-supported {
 	pointer-events: initial;
 }
 
+#logo {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: var(--sidenav-width);
+	background-color: rgba(0, 30, 128, 0.2);
+	color: white;
+	pointer-events: initial;
+}
+
 #nav {
 	position: absolute;
 	top: 0;
@@ -67,22 +78,58 @@ html, body, main, .not-supported {
 	height: 32px;
 }
 
-#icon-nav line {
-	transition: all 600ms ease-out;
+#icon-nav g line {
 	stroke-width: 4px;
-	stroke: rgb(189, 189, 189);
 	stroke-linecap: round;
-	transform: translate3d(0, 0, 0) scale(1);
 }
 
-.zoomout #nav #icon-nav #icon-nav-top-base, .zoomout  #nav #icon-nav #icon-nav-top-hover {
+#icon-nav g line:first-child {
+	stroke: hsl(var(--main-bc-h), 10%, 90%);
+}
+
+#icon-nav g line:last-child {
+	--transition-duration: 600ms;
+	transition-property: transform;
+	transition-timing-function: ease-out;
+	transition-duration: var(--transition-duration);
+	stroke: hsl(var(--main-fc-h), var(--main-fc-s), var(--main-fc-l));
+}
+
+#icon-nav #icon-nav-center line:last-child  {
+	transition-duration: calc(var(--transition-duration) * 0.6666);
+}
+
+#icon-nav g {
+	transition-property: transform;
+	transition-timing-function: ease-out;
+}
+
+.zoomout #icon-nav g {
+	transition-duration: 600ms;
+}
+
+.zoomin #icon-nav g {
+	transition-duration: 300ms;
+}
+
+.zoomout #icon-nav-top {
 	transform: translate3d(6px, 3px, 0) rotate(45deg);
 }
-.zoomout #nav #icon-nav #icon-nav-center-base, .zoomout  #nav #icon-nav #icon-nav-center-hover {
+
+.zoomout #icon-nav-center {
 	transform: translate3d(30px, 16px, 0) scale(0);
 }
-.zoomout #nav #icon-nav #icon-nav-bottom-base, .zoomout  #nav #icon-nav #icon-nav-bottom-hover {
+
+.zoomout #icon-nav-bottom {
 	transform: translate3d(-16px, 6px, 0) rotate(-45deg);
+}
+
+#icon-nav g :last-child {
+	transform: translate3d(16px, 0px, 0) scaleX(0);
+}
+
+#nav:hover g :last-child {
+	transform: translate3d(0, 0, 0) scaleX(1);
 }
 
 main {
@@ -363,6 +410,7 @@ main article > div > section {
 	position: relative;
 	margin-right: var(--header-size);
 	min-height: var(--header-size);
+
 }
 
 main article > div > section.visible {
