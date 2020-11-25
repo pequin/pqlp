@@ -55,11 +55,34 @@ html, body, main, .not-supported {
 	bottom: 0;
 	right: 0;
 	width: var(--header-size);
-	background-color: rgba(0, 128, 0, 0.2);
+	background-color: transparent;
 	color: white;
 	cursor: pointer;
 	pointer-events: initial;
 	outline: none;
+}
+
+#icon-nav {
+	width: 32px;
+	height: 32px;
+}
+
+#icon-nav line {
+	transition: all 600ms ease-out;
+	stroke-width: 4px;
+	stroke: rgb(189, 189, 189);
+	stroke-linecap: round;
+	transform: translate3d(0, 0, 0) scale(1);
+}
+
+.zoomout #nav #icon-nav #icon-nav-top-base, .zoomout  #nav #icon-nav #icon-nav-top-hover {
+	transform: translate3d(6px, 3px, 0) rotate(45deg);
+}
+.zoomout #nav #icon-nav #icon-nav-center-base, .zoomout  #nav #icon-nav #icon-nav-center-hover {
+	transform: translate3d(30px, 16px, 0) scale(0);
+}
+.zoomout #nav #icon-nav #icon-nav-bottom-base, .zoomout  #nav #icon-nav #icon-nav-bottom-hover {
+	transform: translate3d(-16px, 6px, 0) rotate(-45deg);
 }
 
 main {
@@ -382,7 +405,7 @@ body#noLoaded:after {
 	z-index: 101;
 }
 
-form {
+/* form {
 	position: relative;
 	padding: 64px;
 	background-color: rgb(222, 247, 0);
@@ -533,7 +556,7 @@ input {
 	position: relative;
 	display: block;
 	background-color: rgb(6, 240, 45);
-}
+} */
 
 @keyframes spinner {
 	0% {
